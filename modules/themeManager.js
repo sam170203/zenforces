@@ -1,5 +1,5 @@
 ZF.ThemeManager = (() => {
-  const THEMES = ['dark', 'light', 'blue', 'warm'];
+  const THEMES = ['dark', 'blue', 'light', 'warm', 'midnight'];
 
   return {
     _active: false,

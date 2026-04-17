@@ -105,71 +105,176 @@ body.zf-focus-mode .zf-focus-hidden {
 #zf-toast.zf-rejected { background: #c62828; }
 #zf-toast.zf-other    { background: #555; }
 
-/* ── Themes ───────────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════
+   THEMES
+   Variables declared per theme — applied once via shared rules below.
+   ══════════════════════════════════════════════════════════════════ */
+
+/* 1 · Zen Dark — warm VS Code-style dark */
 body.zf-theme-dark {
-  --zf-bg:      #1a1b1e;
-  --zf-bg2:     #26272b;
-  --zf-text:    #c9d1d9;
-  --zf-border:  #30363d;
-  background-color: var(--zf-bg) !important;
-  color: var(--zf-text) !important;
-}
-body.zf-theme-dark .roundbox,
-body.zf-theme-dark .datatable,
-body.zf-theme-dark #sidebar,
-body.zf-theme-dark .content-with-sidebar {
-  background-color: var(--zf-bg2) !important;
-  border-color: var(--zf-border) !important;
-  color: var(--zf-text) !important;
+  --zf-bg:       #1e1e1e;
+  --zf-bg-panel: #252526;
+  --zf-bg-alt:   #2a2a2c;
+  --zf-text:     #cccccc;
+  --zf-text-dim: #858585;
+  --zf-accent:   #4ec9b0;
+  --zf-border:   #404040;
 }
 
-body.zf-theme-light {
-  --zf-bg:      #f5f5f0;
-  --zf-bg2:     #ffffff;
-  --zf-text:    #24292e;
-  --zf-border:  #ddd;
-  background-color: var(--zf-bg) !important;
-  color: var(--zf-text) !important;
-}
-body.zf-theme-light .roundbox,
-body.zf-theme-light .datatable,
-body.zf-theme-light #sidebar,
-body.zf-theme-light .content-with-sidebar {
-  background-color: var(--zf-bg2) !important;
-  border-color: var(--zf-border) !important;
-  color: var(--zf-text) !important;
-}
-
+/* 2 · Deep Blue Focus — navy immersion environment */
 body.zf-theme-blue {
-  --zf-bg:      #0d1117;
-  --zf-bg2:     #111827;
-  --zf-text:    #bfdbfe;
-  --zf-border:  #1e3a5f;
+  --zf-bg:       #0f1923;
+  --zf-bg-panel: #162130;
+  --zf-bg-alt:   #1b2a3f;
+  --zf-text:     #c5d4e8;
+  --zf-text-dim: #6b86a4;
+  --zf-accent:   #58a6d4;
+  --zf-border:   #1f3347;
+}
+
+/* 3 · Soft Light — off-white, easy on the eyes */
+body.zf-theme-light {
+  --zf-bg:       #f8f8f6;
+  --zf-bg-panel: #ffffff;
+  --zf-bg-alt:   #f2f2ef;
+  --zf-text:     #1f1f1f;
+  --zf-text-dim: #5f5f5f;
+  --zf-accent:   #0067df;
+  --zf-border:   #dededb;
+}
+
+/* 4 · Warm Minimal — amber candlelight */
+body.zf-theme-warm {
+  --zf-bg:       #191008;
+  --zf-bg-panel: #221508;
+  --zf-bg-alt:   #2b1e0e;
+  --zf-text:     #ead5b0;
+  --zf-text-dim: #8a6c42;
+  --zf-accent:   #d4895a;
+  --zf-border:   #3a2510;
+}
+
+/* 5 · Midnight Pro — near-black with violet accent */
+body.zf-theme-midnight {
+  --zf-bg:       #07090f;
+  --zf-bg-panel: #0d1019;
+  --zf-bg-alt:   #141828;
+  --zf-text:     #e0e8f4;
+  --zf-text-dim: #4a5568;
+  --zf-accent:   #a78bfa;
+  --zf-border:   #1a2038;
+}
+
+/* ── Shared application — all themed pages ─────────────────────────── */
+
+body[class*="zf-theme-"] {
   background-color: var(--zf-bg) !important;
   color: var(--zf-text) !important;
 }
-body.zf-theme-blue .roundbox,
-body.zf-theme-blue .datatable,
-body.zf-theme-blue #sidebar,
-body.zf-theme-blue .content-with-sidebar {
-  background-color: var(--zf-bg2) !important;
+
+/* Layout wrappers */
+body[class*="zf-theme-"] #body-wrapper,
+body[class*="zf-theme-"] #pageContent,
+body[class*="zf-theme-"] .content-with-sidebar,
+body[class*="zf-theme-"] .wrap {
+  background-color: var(--zf-bg) !important;
+}
+
+/* Panels / cards */
+body[class*="zf-theme-"] .roundbox {
+  background-color: var(--zf-bg-panel) !important;
   border-color: var(--zf-border) !important;
   color: var(--zf-text) !important;
 }
 
-body.zf-theme-warm {
-  --zf-bg:      #1c1510;
-  --zf-bg2:     #251d15;
-  --zf-text:    #e8d5b7;
-  --zf-border:  #3d2e1e;
-  background-color: var(--zf-bg) !important;
-  color: var(--zf-text) !important;
+/* Sidebar */
+body[class*="zf-theme-"] #sidebar {
+  background-color: var(--zf-bg-panel) !important;
+  border-color: var(--zf-border) !important;
 }
-body.zf-theme-warm .roundbox,
-body.zf-theme-warm .datatable,
-body.zf-theme-warm #sidebar,
-body.zf-theme-warm .content-with-sidebar {
-  background-color: var(--zf-bg2) !important;
+
+/* Problem statement */
+body[class*="zf-theme-"] .problem-statement {
+  background-color: var(--zf-bg-panel) !important;
+  color: var(--zf-text) !important;
+  border-color: var(--zf-border) !important;
+}
+
+/* Data tables — problem list, submissions, standings */
+body[class*="zf-theme-"] .datatable,
+body[class*="zf-theme-"] table.problems,
+body[class*="zf-theme-"] table.standings {
+  border-color: var(--zf-border) !important;
+}
+body[class*="zf-theme-"] .datatable tr,
+body[class*="zf-theme-"] table.problems tr,
+body[class*="zf-theme-"] table.standings tr {
+  background-color: var(--zf-bg-panel) !important;
+}
+body[class*="zf-theme-"] .datatable tr:nth-child(even),
+body[class*="zf-theme-"] table.problems tr:nth-child(even),
+body[class*="zf-theme-"] table.standings tr:nth-child(even) {
+  background-color: var(--zf-bg-alt) !important;
+}
+
+/* Table cells — preserve verdict colors (accepted/rejected) */
+body[class*="zf-theme-"] td,
+body[class*="zf-theme-"] th {
   border-color: var(--zf-border) !important;
   color: var(--zf-text) !important;
+}
+body[class*="zf-theme-"] td.status-verdict-cell.verdict-accepted,
+body[class*="zf-theme-"] td.status-verdict-cell.verdict-rejected {
+  color: inherit !important;
+}
+
+/* Code / pre blocks */
+body[class*="zf-theme-"] pre,
+body[class*="zf-theme-"] .CodeMirror {
+  background-color: var(--zf-bg-alt) !important;
+  color: var(--zf-text) !important;
+  border-color: var(--zf-border) !important;
+}
+
+/* Navigation & menus */
+body[class*="zf-theme-"] .second-level-menu-list,
+body[class*="zf-theme-"] .second-level-menu-list li,
+body[class*="zf-theme-"] .menu-list li {
+  background-color: var(--zf-bg-panel) !important;
+  border-color: var(--zf-border) !important;
+}
+body[class*="zf-theme-"] .second-level-menu-list a,
+body[class*="zf-theme-"] .menu-list a {
+  color: var(--zf-text) !important;
+}
+body[class*="zf-theme-"] .second-level-menu-list .current-menu-item > a,
+body[class*="zf-theme-"] .second-level-menu-list .selected a {
+  color: var(--zf-accent) !important;
+}
+
+/* Form inputs */
+body[class*="zf-theme-"] input[type="text"],
+body[class*="zf-theme-"] input[type="search"],
+body[class*="zf-theme-"] input[type="number"],
+body[class*="zf-theme-"] select,
+body[class*="zf-theme-"] textarea {
+  background-color: var(--zf-bg-panel) !important;
+  color: var(--zf-text) !important;
+  border-color: var(--zf-border) !important;
+}
+
+/* Section / roundbox titles */
+body[class*="zf-theme-"] .roundbox .title,
+body[class*="zf-theme-"] .roundbox-lt,
+body[class*="zf-theme-"] .roundbox-rt {
+  background-color: var(--zf-bg-alt) !important;
+  color: var(--zf-text) !important;
+  border-color: var(--zf-border) !important;
+}
+
+/* Muted secondary text */
+body[class*="zf-theme-"] .hint,
+body[class*="zf-theme-"] .info,
+body[class*="zf-theme-"] .notice {
+  color: var(--zf-text-dim) !important;
 }
