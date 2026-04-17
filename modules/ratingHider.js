@@ -1,7 +1,7 @@
 ZF.RatingHider = (() => {
-  const RATING_ONLY_RE = /\b(contest\s*rating|rating\s*:|max\.?\s*(rating|)?|newbie|pupil|specialist|expert|candidate\s*master|master|international\s*grand?\s*master|grand\s*master|legendary\s*grand\s*master)\b/i;
+  const RATING_TEXT_RE = /(contest\s*rating|rating\s*:|max\.?)/i;
 
-  const RATING_CONTAINERS = [
+  const RATING_CLASSES = [
     '.rating',
     '.user-rank',
     '.max-rating-box',
@@ -9,74 +9,60 @@ ZF.RatingHider = (() => {
     '.rating-overview',
     '.rating-badge',
     '.user-rank-block',
+    '.contest-cell .rating',
   ];
 
-  const SAFE_TAGS = ['PRE', 'CODE', 'SCRIPT', 'STYLE'];
+  const PROFILE_CONTAINERS = [
+    'div.info',
+    '.main-info',
+    '.personal-sidebar',
+    '#userbox',
+    '.userbox-rating',
+    '.max-rating-box',
+    '.rating-overview',
+    '.user-rank-block',
+    '.profile-info',
+  ];
 
-  function isSafeElement(el) {
-    if (!el) return true;
-    if (SAFE_TAGS.includes(el.tagName)) return true;
-    if (el.closest?.('.problem-statement, .sample-tests, .input-output')) return true;
-    return false;
+  function isSafeZone(el) {
+    if (!el) return false;
+    const safe = el.closest?.('.problem-statement, .sample-tests, .input-output, pre, code, script, style');
+    return !!safe;
   }
 
-  function hasProfileLink(el) {
-    return el?.querySelector?.('a[href*="/profile/"], a[href*="/contests/"]') !== null;
+  function hasMainContent(el) {
+    return el?.querySelector?.('a[href*="/profile/"]') !== null && 
+           !el?.classList?.contains('rating') &&
+           !el?.classList?.contains('user-rank');
   }
 
-  function findSmallestRatingContainer(textNode) {
-    const PREFER_TAGS = ['SPAN', 'SMALL', 'B', 'STRONG', 'A'];
-    const SKIP_TAGS = ['NAV', 'HEADER', 'FOOTER', 'MAIN', 'ASIDE'];
-    
+  function findHideTarget(textNode) {
+    const CONTAINER_TAGS = ['LI', 'TD', 'SPAN', 'SMALL', 'DIV', 'P'];
     let el = textNode.parentElement;
-    let bestTarget = null;
     let depth = 0;
-    const maxDepth = 5;
     
-    while (el && el !== document.body && depth < maxDepth) {
-      if (SKIP_TAGS.includes(el.tagName)) return null;
+    while (el && el !== document.body && depth < 8) {
+      if (['NAV', 'HEADER', 'FOOTER', 'MAIN', 'ASIDE'].includes(el.tagName)) return null;
+      if (el.classList?.contains('rated-user') || el.classList?.contains('username')) return null;
       
-      if (PREFER_TAGS.includes(el.tagName)) {
-        const textLen = el.textContent.trim().length;
-        if (textLen < 60 && !hasProfileLink(el)) {
+      if (CONTAINER_TAGS.includes(el.tagName)) {
+        const text = el.textContent?.trim() || '';
+        if (text.length < 120 && !hasMainContent(el)) {
           return el;
         }
       }
-      
-      if (el.classList?.contains('rating') || 
-          el.classList?.contains('user-rank') ||
-          el.classList?.contains('max-rating') ||
-          el.tagName === 'LI') {
-        const textLen = el.textContent.trim().length;
-        if (textLen < 80 && !hasProfileLink(el)) {
-          return el;
-        }
-      }
-      
-      bestTarget = el;
       el = el.parentElement;
       depth++;
     }
-    
-    if (bestTarget && !hasProfileLink(bestTarget)) {
-      const textLen = bestTarget.textContent.trim().length;
-      if (textLen < 100) return bestTarget;
-    }
-    
     return null;
   }
 
-  function processElement(el) {
-    if (isSafeElement(el)) return;
-    if (hasProfileLink(el)) return;
-    if (el.classList?.contains('zf-rating-hidden')) return;
-    
-    const text = el.textContent?.trim() || '';
-    if (!text || text.length > 100) return;
-    
-    if (RATING_ONLY_RE.test(text)) {
-      el.classList.add('zf-rating-hidden');
-    }
+  function hideElement(el) {
+    if (!el || el.classList?.contains('zf-rating-hidden')) return false;
+    if (isSafeZone(el)) return false;
+    if (el.querySelector?.('a[href*="/contests/"], a[href*="/problemset/"]')) return false;
+    el.classList.add('zf-rating-hidden');
+    return true;
   }
 
   return {
@@ -113,52 +99,47 @@ ZF.RatingHider = (() => {
 
     _process(node) {
       const root = node === document ? document : node;
-      
-      for (const sel of RATING_CONTAINERS) {
+
+      for (const sel of RATING_CLASSES) {
         try {
-          const els = root.querySelectorAll(sel);
-          els.forEach(el => {
-            if (this._processed.has(el)) return;
-            if (isSafeElement(el)) return;
-            if (hasProfileLink(el)) return;
-            this._processed.add(el);
-            el.classList.add('zf-rating-hidden');
+          root.querySelectorAll(sel).forEach(el => {
+            if (!this._processed.has(el)) {
+              this._processed.add(el);
+              hideElement(el);
+            }
           });
         } catch (_) {}
       }
-      
-      const infoContainers = root.querySelectorAll(
-        'div.info, .main-info, .personal-sidebar, #userbox, .profile-info'
-      );
-      
-      infoContainers.forEach(container => {
-        if (isSafeElement(container) || hasProfileLink(container)) return;
-        
-        const walker = document.createTreeWalker(
-          container,
-          NodeFilter.SHOW_TEXT,
-          {
-            acceptNode: (node) => {
-              if (!node.textContent.trim()) return NodeFilter.FILTER_REJECT;
-              if (node.parentElement?.closest?.('a, button')) return NodeFilter.FILTER_REJECT;
-              return NodeFilter.FILTER_ACCEPT;
+
+      for (const sel of PROFILE_CONTAINERS) {
+        try {
+          root.querySelectorAll(sel).forEach(container => {
+            if (isSafeZone(container)) return;
+            
+            const walker = document.createTreeWalker(
+              container,
+              NodeFilter.SHOW_TEXT,
+              null
+            );
+            
+            let textNode;
+            while ((textNode = walker.nextNode())) {
+              if (textNode.parentElement?.closest?.('a, button, script')) continue;
+              
+              const text = textNode.textContent?.trim() || '';
+              if (!text || text.length > 150) continue;
+              
+              if (RATING_TEXT_RE.test(text)) {
+                const target = findHideTarget(textNode);
+                if (target && !this._processed.has(target)) {
+                  this._processed.add(target);
+                  hideElement(target);
+                }
+              }
             }
-          }
-        );
-        
-        let textNode;
-        while ((textNode = walker.nextNode())) {
-          const text = textNode.textContent.trim();
-          if (!text || text.length > 80) continue;
-          if (RATING_ONLY_RE.test(text)) {
-            const target = findSmallestRatingContainer(textNode);
-            if (target && !this._processed.has(target)) {
-              this._processed.add(target);
-              target.classList.add('zf-rating-hidden');
-            }
-          }
-        }
-      });
+          });
+        } catch (_) {}
+      }
     },
   };
 })();

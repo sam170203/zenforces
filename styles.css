@@ -44,9 +44,22 @@ body.zf-blur-ratings .zf-rating-hidden:hover {
 
 /* ── Color Neutralizer ────────────────────────────────────────────── */
 body.zf-neutral-colors a.rated-user,
-body.zf-neutral-colors .rating-link {
+body.zf-neutral-colors .rating-link,
+body.zf-neutral-colors [class*="user-"],
+body.zf-neutral-colors a[href*="/profile/"]:not(.contest-name),
+body.zf-neutral-colors .contestant-name a {
   color: var(--zf-username-color, #4a90d9) !important;
-  transition: opacity 0.15s ease;
+  transition: color 0.15s ease;
+}
+
+body.zf-neutral-colors a.rated-user *,
+body.zf-neutral-colors .rating-link * {
+  color: inherit !important;
+}
+
+a.rated-user.zf-username,
+a[style*="color"].rated-user {
+  color: var(--zf-username-color, #4a90d9) !important;
 }
 
 /* ── Clean UI ─────────────────────────────────────────────────────── */

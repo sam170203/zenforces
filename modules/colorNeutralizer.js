@@ -1,13 +1,27 @@
 ZF.ColorNeutralizer = (() => {
-  const SEL = () => ZF.SELECTORS;
+  const USERNAME_SELECTORS = [
+    'a.rated-user',
+    '.rating-link',
+    '[class*="rated-user"]',
+    '.contestant-name a',
+  ];
 
   function validColor(val) {
     return ZF.isValidHex(val) ? val : '#4a90d9';
   }
 
+  function applyColor(color) {
+    document.documentElement.style.setProperty('--zf-username-color', color);
+  }
+
+  function applyInlineColor(el, color) {
+    el.style.setProperty('color', color, 'important');
+  }
+
   return {
     _active: false,
     _processed: new WeakSet(),
+    _currentColor: '#4a90d9',
 
     init(settings, node = document) {
       if (this._active) {
@@ -15,8 +29,9 @@ ZF.ColorNeutralizer = (() => {
         return;
       }
       this._active = true;
+      this._currentColor = validColor(settings.usernameColor);
       document.body.classList.add('zf-neutral-colors');
-      ZF.setCSSVar('--zf-username-color', validColor(settings.usernameColor));
+      applyColor(this._currentColor);
       this._process(node);
       ZF.log('ColorNeutralizer: init');
     },
@@ -32,7 +47,8 @@ ZF.ColorNeutralizer = (() => {
 
     update(settings) {
       if (!this._active) return;
-      ZF.setCSSVar('--zf-username-color', validColor(settings.usernameColor));
+      this._currentColor = validColor(settings.usernameColor);
+      applyColor(this._currentColor);
     },
 
     onPageChange(url) {
@@ -42,19 +58,30 @@ ZF.ColorNeutralizer = (() => {
     },
 
     _process(node) {
-      SEL().usernames.forEach(sel => {
-        let els;
+      const root = node === document ? document : node;
+
+      for (const sel of USERNAME_SELECTORS) {
         try {
-          els = node === document
-            ? document.querySelectorAll(sel)
-            : (node.matches?.(sel) ? [node] : node.querySelectorAll(sel));
-        } catch (_) { return; }
-        els.forEach(el => {
-          if (this._processed.has(el)) return;
-          this._processed.add(el);
-          // CSS handles the color via body class + CSS var — no inline style needed
-        });
-      });
+          const els = root.querySelectorAll(sel);
+          els.forEach(el => {
+            if (this._processed.has(el)) return;
+            this._processed.add(el);
+            applyInlineColor(el, this._currentColor);
+          });
+        } catch (_) {}
+      }
+
+      if (root !== document) {
+        try {
+          const directMatch = root.matches?.(sel => USERNAME_SELECTORS.includes(sel));
+          if (directMatch) {
+            if (!this._processed.has(root)) {
+              this._processed.add(root);
+              applyInlineColor(root, this._currentColor);
+            }
+          }
+        } catch (_) {}
+      }
     },
   };
 })();
