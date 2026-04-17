@@ -1,50 +1,82 @@
 ZF.RatingHider = (() => {
-  const SEL = () => ZF.SELECTORS;
+  const RATING_ONLY_RE = /\b(contest\s*rating|rating\s*:|max\.?\s*(rating|)?|newbie|pupil|specialist|expert|candidate\s*master|master|international\s*grand?\s*master|grand\s*master|legendary\s*grand\s*master)\b/i;
 
-  const SCAN_ROOTS_PROFILE = [
-    'div.info',
-    '.main-info',
-    '.personal-sidebar',
-    '#userbox',
-    '.userbox-rating',
+  const RATING_CONTAINERS = [
+    '.rating',
+    '.user-rank',
     '.max-rating-box',
+    '.userbox-rating',
     '.rating-overview',
+    '.rating-badge',
     '.user-rank-block',
-    '.profile-info',
-    '.contest-cell',
   ];
 
-  const RATING_TEXT_RE = /(contest\s*rating|rating\s*:|max\.|newbie|pupil|specialist|expert|candidate master|master|grandmaster)/i;
+  const SAFE_TAGS = ['PRE', 'CODE', 'SCRIPT', 'STYLE'];
 
-  const SAFE_ZONES = [
-    'pre',
-    'code',
-    '.problem-statement',
-    '.sample-tests',
-    '.input',
-    '.output',
-    '.answer',
-  ];
-
-  function isInSafeZone(el) {
-    for (const sel of SAFE_ZONES) {
-      if (el.closest?.(sel)) return true;
-    }
+  function isSafeElement(el) {
+    if (!el) return true;
+    if (SAFE_TAGS.includes(el.tagName)) return true;
+    if (el.closest?.('.problem-statement, .sample-tests, .input-output')) return true;
     return false;
   }
 
-  function findParentToHide(textNode) {
-    const ROW_TAGS = new Set(['LI', 'TR', 'TD', 'TH', 'DIV', 'P', 'SPAN', 'TD']);
-    const STOP_TAGS = new Set(['TABLE', 'TBODY', 'THEAD', 'TFOOT', 'UL', 'OL', 'SECTION', 'BODY', 'FORM']);
+  function hasProfileLink(el) {
+    return el?.querySelector?.('a[href*="/profile/"], a[href*="/contests/"]') !== null;
+  }
+
+  function findSmallestRatingContainer(textNode) {
+    const PREFER_TAGS = ['SPAN', 'SMALL', 'B', 'STRONG', 'A'];
+    const SKIP_TAGS = ['NAV', 'HEADER', 'FOOTER', 'MAIN', 'ASIDE'];
+    
     let el = textNode.parentElement;
     let bestTarget = null;
-    while (el && !STOP_TAGS.has(el.tagName)) {
-      if (ROW_TAGS.has(el.tagName) && el.textContent.trim().length < 100) {
-        bestTarget = el;
+    let depth = 0;
+    const maxDepth = 5;
+    
+    while (el && el !== document.body && depth < maxDepth) {
+      if (SKIP_TAGS.includes(el.tagName)) return null;
+      
+      if (PREFER_TAGS.includes(el.tagName)) {
+        const textLen = el.textContent.trim().length;
+        if (textLen < 60 && !hasProfileLink(el)) {
+          return el;
+        }
       }
+      
+      if (el.classList?.contains('rating') || 
+          el.classList?.contains('user-rank') ||
+          el.classList?.contains('max-rating') ||
+          el.tagName === 'LI') {
+        const textLen = el.textContent.trim().length;
+        if (textLen < 80 && !hasProfileLink(el)) {
+          return el;
+        }
+      }
+      
+      bestTarget = el;
       el = el.parentElement;
+      depth++;
     }
-    return bestTarget || textNode.parentElement;
+    
+    if (bestTarget && !hasProfileLink(bestTarget)) {
+      const textLen = bestTarget.textContent.trim().length;
+      if (textLen < 100) return bestTarget;
+    }
+    
+    return null;
+  }
+
+  function processElement(el) {
+    if (isSafeElement(el)) return;
+    if (hasProfileLink(el)) return;
+    if (el.classList?.contains('zf-rating-hidden')) return;
+    
+    const text = el.textContent?.trim() || '';
+    if (!text || text.length > 100) return;
+    
+    if (RATING_ONLY_RE.test(text)) {
+      el.classList.add('zf-rating-hidden');
+    }
   }
 
   return {
@@ -80,64 +112,53 @@ ZF.RatingHider = (() => {
     },
 
     _process(node) {
-      // ── Pass 1: selector-based tagging ──────────────────────────────
-      const s = SEL();
-      const allSelectors = [...s.ratings, ...s.rankLabels, ...s.usernames];
-
-      allSelectors.forEach(sel => {
-        let els;
+      const root = node === document ? document : node;
+      
+      for (const sel of RATING_CONTAINERS) {
         try {
-          els = node === document
-            ? document.querySelectorAll(sel)
-            : (node.matches?.(sel) ? [node] : node.querySelectorAll(sel));
-        } catch (_) { return; }
-        els.forEach(el => {
-          if (this._processed.has(el)) return;
-          this._processed.add(el);
-          el.classList.add('zf-rating-hidden');
-        });
+          const els = root.querySelectorAll(sel);
+          els.forEach(el => {
+            if (this._processed.has(el)) return;
+            if (isSafeElement(el)) return;
+            if (hasProfileLink(el)) return;
+            this._processed.add(el);
+            el.classList.add('zf-rating-hidden');
+          });
+        } catch (_) {}
+      }
+      
+      const infoContainers = root.querySelectorAll(
+        'div.info, .main-info, .personal-sidebar, #userbox, .profile-info'
+      );
+      
+      infoContainers.forEach(container => {
+        if (isSafeElement(container) || hasProfileLink(container)) return;
+        
+        const walker = document.createTreeWalker(
+          container,
+          NodeFilter.SHOW_TEXT,
+          {
+            acceptNode: (node) => {
+              if (!node.textContent.trim()) return NodeFilter.FILTER_REJECT;
+              if (node.parentElement?.closest?.('a, button')) return NodeFilter.FILTER_REJECT;
+              return NodeFilter.FILTER_ACCEPT;
+            }
+          }
+        );
+        
+        let textNode;
+        while ((textNode = walker.nextNode())) {
+          const text = textNode.textContent.trim();
+          if (!text || text.length > 80) continue;
+          if (RATING_ONLY_RE.test(text)) {
+            const target = findSmallestRatingContainer(textNode);
+            if (target && !this._processed.has(target)) {
+              this._processed.add(target);
+              target.classList.add('zf-rating-hidden');
+            }
+          }
+        }
       });
-
-      // ── Pass 2: text-based scan inside scoped containers ────────────
-      this._textScan(node);
-    },
-
-    _textScan(root) {
-      for (const sel of SCAN_ROOTS_PROFILE) {
-        let containers;
-        try {
-          if (root === document) {
-            containers = [...document.querySelectorAll(sel)];
-          } else if (root.matches?.(sel)) {
-            containers = [root];
-          } else {
-            containers = [...(root.querySelectorAll?.(sel) ?? [])];
-          }
-        } catch (_) { continue; }
-
-        for (const container of containers) {
-          if (!isInSafeZone(container)) {
-            this._walkContainer(container);
-          }
-        }
-      }
-    },
-
-    _walkContainer(container) {
-      const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null);
-      let node;
-      while ((node = walker.nextNode())) {
-        if (isInSafeZone(node)) continue;
-        const text = node.textContent.trim();
-        if (!text || text.length > 80) continue;
-        if (RATING_TEXT_RE.test(text)) {
-          const target = findParentToHide(node);
-          if (target && !this._processed.has(target)) {
-            this._processed.add(target);
-            target.classList.add('zf-rating-hidden');
-          }
-        }
-      }
     },
   };
 })();

@@ -1,8 +1,10 @@
 ZF.SubmissionFeedback = (() => {
   let _toastEl = null;
+  let _confettiEl = null;
   let _pollInterval = null;
   let _lastVerdict = null;
   let _hideTimeout = null;
+  let _settings = {};
 
   function createToast() {
     _toastEl = document.createElement('div');
@@ -12,11 +14,66 @@ ZF.SubmissionFeedback = (() => {
     document.body.appendChild(_toastEl);
   }
 
+  function removeConfetti() {
+    if (_confettiEl) {
+      _confettiEl.remove();
+      _confettiEl = null;
+    }
+  }
+
+  function createConfetti() {
+    removeConfetti();
+    _confettiEl = document.createElement('div');
+    _confettiEl.id = 'zf-confetti';
+    _confettiEl.innerHTML = Array.from({ length: 20 }, (_, i) => {
+      const color = ['#10b981', '#3b82f6', '#f59e0b', '#ec4899', '#8b5cf6'][i % 5];
+      const x = Math.random() * 100;
+      const delay = Math.random() * 0.5;
+      const size = 6 + Math.random() * 6;
+      return `<div class="zf-confetti-piece" style="
+        left: ${x}%;
+        background: ${color};
+        width: ${size}px;
+        height: ${size}px;
+        animation-delay: ${delay}s;
+      "></div>`;
+    }).join('');
+    document.body.appendChild(_confettiEl);
+    
+    setTimeout(removeConfetti, 2000);
+  }
+
+  function playSuccessSound() {
+    if (!_settings.successSound) return;
+    
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(ctx.destination);
+      
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(523.25, ctx.currentTime);
+      oscillator.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1);
+      oscillator.frequency.setValueAtTime(783.99, ctx.currentTime + 0.2);
+      
+      gainNode.gain.setValueAtTime(0.15, ctx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+      
+      oscillator.start(ctx.currentTime);
+      oscillator.stop(ctx.currentTime + 0.4);
+    } catch (_) {}
+  }
+
   function showToast(text, cls) {
     if (!_toastEl) return;
     clearTimeout(_hideTimeout);
+    
+    _toastEl.className = cls;
     _toastEl.textContent = text;
-    _toastEl.className = cls; // replaces all classes
+    
     requestAnimationFrame(() =>
       requestAnimationFrame(() => {
         _toastEl.classList.add('zf-visible');
@@ -25,6 +82,14 @@ ZF.SubmissionFeedback = (() => {
         }, 3000);
       })
     );
+    
+    if (cls === 'zf-accepted') {
+      createConfetti();
+      playSuccessSound();
+    } else if (cls === 'zf-rejected') {
+      _toastEl.classList.add('zf-shake');
+      setTimeout(() => _toastEl.classList.remove('zf-shake'), 500);
+    }
   }
 
   function check() {
@@ -40,10 +105,15 @@ ZF.SubmissionFeedback = (() => {
     if (!text || text === _lastVerdict) return;
     _lastVerdict = text;
 
-    const cls = /accepted/i.test(text)   ? 'zf-accepted'
-              : /wrong answer|time limit|memory limit|runtime error|compilation/i.test(text)
-                                          ? 'zf-rejected'
-              :                             'zf-other';
+    const isAccepted = /accepted/i.test(text);
+    const isRejected = /wrong answer|time limit|memory limit|runtime error|compilation/i.test(text);
+    const isTLE = /time limit exceeded/i.test(text);
+
+    const cls = isAccepted ? 'zf-accepted'
+              : isRejected ? 'zf-rejected'
+              : isTLE ? 'zf-tle'
+              : 'zf-other';
+    
     showToast(text, cls);
   }
 
@@ -54,6 +124,7 @@ ZF.SubmissionFeedback = (() => {
     init(settings, node = document) {
       if (this._active) return;
       this._active = true;
+      _settings = settings;
       createToast();
       _pollInterval = setInterval(check, 2000);
       ZF.log('SubmissionFeedback: init');
@@ -67,14 +138,20 @@ ZF.SubmissionFeedback = (() => {
       _pollInterval = null;
       _hideTimeout = null;
       _lastVerdict = null;
+      removeConfetti();
       if (_toastEl) { _toastEl.remove(); _toastEl = null; }
       ZF.log('SubmissionFeedback: destroyed');
     },
 
-    update(settings) {},
+    update(settings) {
+      _settings = settings;
+    },
 
     onPageChange(url) {
-      if (this._active) _lastVerdict = null;
+      if (this._active) {
+        _lastVerdict = null;
+        removeConfetti();
+      }
     },
   };
 })();

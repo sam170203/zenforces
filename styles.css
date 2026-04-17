@@ -88,24 +88,73 @@ body.zf-focus-mode .zf-focus-hidden {
   position: fixed;
   top: 24px;
   right: 24px;
-  padding: 10px 20px;
-  border-radius: 6px;
+  padding: 12px 24px;
+  border-radius: 8px;
   font-size: 14px;
   font-weight: 600;
   color: #fff;
-  z-index: 9999;
+  z-index: 99999;
   opacity: 0;
-  transform: translateY(-8px);
-  transition: opacity 0.18s ease, transform 0.18s ease;
+  transform: translateY(-12px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
   pointer-events: none;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
 }
 #zf-toast.zf-visible {
   opacity: 1;
   transform: translateY(0);
 }
-#zf-toast.zf-accepted { background: #2e7d32; }
-#zf-toast.zf-rejected { background: #c62828; }
-#zf-toast.zf-other    { background: #555; }
+#zf-toast.zf-accepted { background: linear-gradient(135deg, #10b981, #059669); }
+#zf-toast.zf-rejected { background: linear-gradient(135deg, #ef4444, #dc2626); }
+#zf-toast.zf-tle { background: linear-gradient(135deg, #f59e0b, #d97706); }
+#zf-toast.zf-other    { background: linear-gradient(135deg, #6366f1, #4f46e5); }
+
+@keyframes zf-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+#zf-toast.zf-shake {
+  animation: zf-shake 0.4s ease-in-out;
+}
+
+@keyframes zf-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.8; }
+}
+#zf-toast.zf-tle {
+  animation: zf-pulse 0.8s ease-in-out infinite;
+}
+
+/* ── Confetti Celebration ─────────────────────────────────────── */
+#zf-confetti {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 99998;
+  overflow: hidden;
+}
+.zf-confetti-piece {
+  position: absolute;
+  top: -10px;
+  border-radius: 2px;
+  animation: zf-fall 2s ease-out forwards;
+}
+@keyframes zf-fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
 
 /* ══════════════════════════════════════════════════════════════════
    PREMIUM THEMES - Richer, Vibrant, Modern

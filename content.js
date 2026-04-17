@@ -5,6 +5,7 @@
     cleanUI:            true,
     timer:              false,
     submissionFeedback: false,
+    successSound:       false,
     focusMode:          false,
     usernameColor:      '#4a90d9',
     timerMode:          'stopwatch',
@@ -138,6 +139,7 @@
 
     if ('usernameColor' in changes) ZF.ColorNeutralizer.update(settings);
     if ('timerMode' in changes) ZF.Timer.update(settings);
+    if ('successSound' in changes) ZF.SubmissionFeedback.update(settings);
     if ('theme' in changes) {
       applyTheme(settings.theme);
       applyThemeInline(settings.theme);

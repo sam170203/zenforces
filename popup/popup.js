@@ -4,6 +4,7 @@ const DEFAULTS = {
   cleanUI:            true,
   timer:              false,
   submissionFeedback: false,
+  successSound:       false,
   focusMode:          false,
   usernameColor:      '#4a90d9',
   timerMode:          'stopwatch',
@@ -13,7 +14,7 @@ const DEFAULTS = {
 
 const FEATURE_KEYS = [
   'ratingHider', 'colorNeutralizer', 'cleanUI',
-  'timer', 'submissionFeedback', 'focusMode',
+  'timer', 'submissionFeedback', 'successSound', 'focusMode',
 ];
 
 function applySettings(settings) {
