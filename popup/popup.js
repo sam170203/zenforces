@@ -75,3 +75,11 @@ document.addEventListener('DOMContentLoaded', () => {
     chrome.storage.sync.set({ extrasExpanded: next });
   });
 });
+
+chrome.storage.onChanged.addListener((changes, areaName) => {
+  if (areaName !== 'sync') return;
+  if ('colorNeutralizer' in changes) {
+    const colorInput = document.getElementById('username-color');
+    if (colorInput) colorInput.disabled = !changes.colorNeutralizer.newValue;
+  }
+});

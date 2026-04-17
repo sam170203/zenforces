@@ -97,7 +97,7 @@ body {
 /* Smooth expand via max-height — do NOT use [hidden] attribute */
 .zf-extras-content {
   overflow: hidden;
-  max-height: 150px;
+  max-height: 150px; /* 3 toggle rows × ~40px each + padding */
   transition: max-height 0.2s ease;
 }
 .zf-extras-content.zf-collapsed {
