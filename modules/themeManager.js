@@ -1,5 +1,5 @@
 ZF.ThemeManager = (() => {
-  const THEMES = ['dark', 'blue', 'light', 'warm', 'midnight'];
+  const THEMES = ['zen-dark', 'deep-blue', 'soft-light', 'warm-minimal', 'midnight-pro'];
 
   return {
     _active: false,
@@ -21,7 +21,7 @@ ZF.ThemeManager = (() => {
     onPageChange() {},
 
     _apply(theme) {
-      THEMES.forEach(t => document.body.classList.remove(`zf-theme-${t}`));
+      document.body.classList.remove(...THEMES.map(t => `zf-theme-${t}`));
       if (THEMES.includes(theme)) {
         document.body.classList.add(`zf-theme-${theme}`);
       }

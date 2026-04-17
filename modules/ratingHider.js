@@ -1,9 +1,7 @@
 ZF.RatingHider = (() => {
   const SEL = () => ZF.SELECTORS;
 
-  // Containers scoped for text-based scanning — profile/sidebar/userbox only.
-  // Never includes problem content or submission tables.
-  const SCAN_ROOTS = [
+  const SCAN_ROOTS_PROFILE = [
     'div.info',
     '.main-info',
     '.personal-sidebar',
@@ -12,25 +10,41 @@ ZF.RatingHider = (() => {
     '.max-rating-box',
     '.rating-overview',
     '.user-rank-block',
+    '.profile-info',
+    '.contest-cell',
   ];
 
-  // Matches standalone rank name text nodes (full match only).
-  const RANK_RE = /^(newbie|pupil|specialist|expert|candidate\s+master|master|international\s+(grand)?master|legendary\s+grandmaster|grandmaster)$/i;
+  const RATING_TEXT_RE = /(contest\s*rating|rating\s*:|max\.|newbie|pupil|specialist|expert|candidate master|master|grandmaster)/i;
 
-  // Matches rows/cells that label rating values.
-  const RATING_LABEL_RE = /\b(contest\s+rating|max\.?\s*rating|current\s+rating|global\s+rating)\s*[:\d]/i;
+  const SAFE_ZONES = [
+    'pre',
+    'code',
+    '.problem-statement',
+    '.sample-tests',
+    '.input',
+    '.output',
+    '.answer',
+  ];
 
-  // Prefer hiding at row-level (<li>/<tr>) to avoid collateral damage.
-  function findTarget(textNode) {
-    const ROW_TAGS  = new Set(['LI', 'TR']);
-    const STOP_TAGS = new Set(['TABLE', 'TBODY', 'UL', 'OL', 'SECTION', 'BODY']);
+  function isInSafeZone(el) {
+    for (const sel of SAFE_ZONES) {
+      if (el.closest?.(sel)) return true;
+    }
+    return false;
+  }
+
+  function findParentToHide(textNode) {
+    const ROW_TAGS = new Set(['LI', 'TR', 'TD', 'TH', 'DIV', 'P', 'SPAN', 'TD']);
+    const STOP_TAGS = new Set(['TABLE', 'TBODY', 'THEAD', 'TFOOT', 'UL', 'OL', 'SECTION', 'BODY', 'FORM']);
     let el = textNode.parentElement;
-    let rowTarget = null;
+    let bestTarget = null;
     while (el && !STOP_TAGS.has(el.tagName)) {
-      if (ROW_TAGS.has(el.tagName)) rowTarget = el;
+      if (ROW_TAGS.has(el.tagName) && el.textContent.trim().length < 100) {
+        bestTarget = el;
+      }
       el = el.parentElement;
     }
-    return rowTarget || textNode.parentElement;
+    return bestTarget || textNode.parentElement;
   }
 
   return {
@@ -89,7 +103,7 @@ ZF.RatingHider = (() => {
     },
 
     _textScan(root) {
-      for (const sel of SCAN_ROOTS) {
+      for (const sel of SCAN_ROOTS_PROFILE) {
         let containers;
         try {
           if (root === document) {
@@ -102,7 +116,9 @@ ZF.RatingHider = (() => {
         } catch (_) { continue; }
 
         for (const container of containers) {
-          this._walkContainer(container);
+          if (!isInSafeZone(container)) {
+            this._walkContainer(container);
+          }
         }
       }
     },
@@ -111,10 +127,11 @@ ZF.RatingHider = (() => {
       const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null);
       let node;
       while ((node = walker.nextNode())) {
+        if (isInSafeZone(node)) continue;
         const text = node.textContent.trim();
-        if (!text) continue;
-        if (RANK_RE.test(text) || RATING_LABEL_RE.test(text)) {
-          const target = findTarget(node);
+        if (!text || text.length > 80) continue;
+        if (RATING_TEXT_RE.test(text)) {
+          const target = findParentToHide(node);
           if (target && !this._processed.has(target)) {
             this._processed.add(target);
             target.classList.add('zf-rating-hidden');
