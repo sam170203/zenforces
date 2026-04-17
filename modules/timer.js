@@ -9,6 +9,14 @@ ZF.Timer = (() => {
   let _dragOffX = 0;
   let _dragOffY = 0;
 
+  function onMouseDown(e) {
+    _dragging = true;
+    const rect = _el.getBoundingClientRect();
+    _dragOffX = e.clientX - rect.left;
+    _dragOffY = e.clientY - rect.top;
+    _el.style.transition = 'none';
+  }
+
   function onMouseMove(e) {
     if (!_dragging || !_el) return;
     _el.style.right = 'auto';
@@ -17,7 +25,10 @@ ZF.Timer = (() => {
     _el.style.top  = `${e.clientY - _dragOffY}px`;
   }
 
-  function onMouseUp() { _dragging = false; }
+  function onMouseUp() {
+    _dragging = false;
+    if (_el) _el.style.transition = '';
+  }
 
   function updateDisplay() {
     if (!_el) return;
@@ -28,7 +39,7 @@ ZF.Timer = (() => {
 
   return {
     _active: false,
-    _processed: new WeakSet(), // satisfies module contract, unused
+    _processed: new WeakSet(), // Not used by Timer (no mutation processing)
 
     init(settings, node = document) {
       if (this._active) return;
@@ -45,13 +56,7 @@ ZF.Timer = (() => {
         requestAnimationFrame(() => _el.classList.add('zf-visible'))
       );
 
-      _el.addEventListener('mousedown', (e) => {
-        _dragging = true;
-        const rect = _el.getBoundingClientRect();
-        _dragOffX = e.clientX - rect.left;
-        _dragOffY = e.clientY - rect.top;
-        _el.style.transition = 'none';
-      });
+      _el.addEventListener('mousedown', onMouseDown);
       document.addEventListener('mousemove', onMouseMove);
       document.addEventListener('mouseup', onMouseUp);
 
@@ -66,9 +71,13 @@ ZF.Timer = (() => {
       clearInterval(_interval);
       _interval = null;
       _seconds = 0;
+      if (_el) {
+        _el.removeEventListener('mousedown', onMouseDown);
+        _el.remove();
+        _el = null;
+      }
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
-      if (_el) { _el.remove(); _el = null; }
       ZF.log('Timer: destroyed');
     },
 
