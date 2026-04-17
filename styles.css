@@ -171,19 +171,19 @@ body.zf-focus-mode .zf-focus-hidden {
 
 /* ══════════════════════════════════════════════════════════════════
    PREMIUM THEMES - Richer, Vibrant, Modern
-   ══════════════════════════════════════════════════════════════════ */
+   ══════════════════════════════════════════════════════════════════════════ */
 
 /* 1 · Zen Dark - Deep, sleek, premium dark UI */
 body.zf-theme-zen-dark {
-  --zf-bg:       #020617;
-  --zf-bg-panel: #0f172a;
-  --zf-bg-alt:   #111827;
-  --zf-text:     #e2e8f0;
-  --zf-text-dim: #94a3b8;
-  --zf-accent:   #3b82f6;
-  --zf-accent2:  #60a5fa;
-  --zf-border:   #1f2937;
-  --zf-shadow:   0 6px 16px rgba(0,0,0,0.4);
+  --zf-bg:       #010409;
+  --zf-bg-panel: #0a0f1c;
+  --zf-bg-alt:   #0f172a;
+  --zf-text:     #e6edf3;
+  --zf-text-dim: #8b949e;
+  --zf-accent:   #58a6ff;
+  --zf-accent2:  #79c0ff;
+  --zf-border:  #21262d;
+  --zf-shadow:   0 8px 24px rgba(0,0,0,0.5);
 }
 
 /* 2 · Deep Blue Focus - Navy immersion with neon accents */
@@ -242,10 +242,14 @@ body.zf-theme-midnight-pro {
 
 body[class*="zf-theme-"] {
   background-color: var(--zf-bg) !important;
-  background-image: linear-gradient(180deg, var(--zf-bg) 0%, var(--zf-bg-alt) 100%) !important;
+  background-image: radial-gradient(circle at top, var(--zf-bg-panel), var(--zf-bg)) !important;
   background-attachment: fixed !important;
   color: var(--zf-text) !important;
   transition: background-color 0.3s ease, color 0.2s ease;
+}
+
+body.zf-theme-zen-dark {
+  background-image: radial-gradient(circle at top, #0a0f1c, #010409) !important;
 }
 
 /* Layout wrappers */
