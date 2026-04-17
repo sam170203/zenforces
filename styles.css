@@ -1,0 +1,89 @@
+/* All Zenforces visual rules. Activated by toggling classes on document.body.
+   zf- prefix on all injected classes to avoid Codeforces conflicts. */
+
+/* ── Rating Hider ─────────────────────────────────────────────────── */
+body.zf-hide-ratings .zf-rating-hidden {
+  visibility: hidden;
+}
+
+/* Remove rank-based color from username links */
+body.zf-hide-ratings a.rated-user,
+body.zf-hide-ratings .rating-link {
+  color: inherit !important;
+  font-weight: inherit !important;
+}
+
+/* Optional blur variant (future toggle — activated by zf-blur-ratings instead) */
+body.zf-blur-ratings .zf-rating-hidden {
+  visibility: visible;
+  filter: blur(4px);
+  transition: filter 0.15s ease;
+}
+body.zf-blur-ratings .zf-rating-hidden:hover {
+  filter: blur(0);
+}
+
+/* ── Color Neutralizer ────────────────────────────────────────────── */
+body.zf-neutral-colors a.rated-user,
+body.zf-neutral-colors .rating-link {
+  color: var(--zf-username-color, #4a90d9) !important;
+  transition: opacity 0.15s ease;
+}
+
+/* ── Clean UI ─────────────────────────────────────────────────────── */
+body.zf-clean-ui .zf-clutter-hidden {
+  display: none !important;
+}
+
+/* ── Focus Mode ───────────────────────────────────────────────────── */
+body.zf-focus-mode .zf-focus-hidden {
+  display: none !important;
+}
+
+/* ── Floating Timer ───────────────────────────────────────────────── */
+#zf-timer {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: rgba(20, 20, 20, 0.88);
+  color: #f0f0f0;
+  font-family: 'Courier New', monospace;
+  font-size: 18px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  z-index: 9999;
+  cursor: move;
+  user-select: none;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  backdrop-filter: blur(4px);
+}
+#zf-timer.zf-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Submission Toast ─────────────────────────────────────────────── */
+#zf-toast {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  z-index: 9999;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  pointer-events: none;
+}
+#zf-toast.zf-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+#zf-toast.zf-accepted { background: #2e7d32; }
+#zf-toast.zf-rejected { background: #c62828; }
+#zf-toast.zf-other    { background: #555; }
