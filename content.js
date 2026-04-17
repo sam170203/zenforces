@@ -27,7 +27,8 @@
   ZF.addStyle('zf-critical', `
     a.rated-user, .rating-link { color: inherit !important; }
     .user-rank, .rating, .max-rating-box, .userbox-rating,
-    .rating-overview, .personal-sidebar .rating-badge { visibility: hidden; }
+    .rating-overview, .personal-sidebar .rating-badge,
+    .user-rank-block, div.info .rating, .main-info .rating { visibility: hidden; }
   `);
 
   let settings = { ...DEFAULTS };

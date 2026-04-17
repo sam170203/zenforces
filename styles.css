@@ -6,7 +6,7 @@ body.zf-hide-ratings .zf-rating-hidden {
   visibility: hidden;
 }
 
-/* Direct CSS fallback — catches profile/sidebar elements without JS tagging */
+/* Direct CSS layer — hides known rating containers without requiring JS tagging */
 body.zf-hide-ratings .user-rank,
 body.zf-hide-ratings .main-info .user-rank,
 body.zf-hide-ratings .info .user-rank,
@@ -14,7 +14,12 @@ body.zf-hide-ratings #userbox .user-rank,
 body.zf-hide-ratings .max-rating-box,
 body.zf-hide-ratings .userbox-rating,
 body.zf-hide-ratings .rating-overview,
-body.zf-hide-ratings .personal-sidebar .rating-badge {
+body.zf-hide-ratings .personal-sidebar .rating-badge,
+body.zf-hide-ratings .user-rank-block,
+body.zf-hide-ratings div.info .rating,
+body.zf-hide-ratings .main-info .rating,
+body.zf-hide-ratings .personal-sidebar .rating,
+body.zf-hide-ratings #userbox .rating {
   visibility: hidden !important;
 }
 
