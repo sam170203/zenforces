@@ -102,8 +102,12 @@
     if (settings.timer) ZF.Timer.onPageChange(location.href);
   }
 
-  // Apply defaults immediately (prevents blocking on slow storage)
-  boot(DEFAULTS);
+  // Apply defaults immediately. Defer if body isn't ready yet (run_at: document_start).
+  if (document.body) {
+    boot(DEFAULTS);
+  } else {
+    document.addEventListener('DOMContentLoaded', () => boot(DEFAULTS), { once: true });
+  }
 
   chrome.storage.sync.get(DEFAULTS, (stored) => {
     if (chrome.runtime.lastError) {

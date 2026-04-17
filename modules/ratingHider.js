@@ -26,6 +26,7 @@ ZF.RatingHider = (() => {
       this._active = false;
       this._processed = new WeakSet();
       document.body.classList.remove('zf-hide-ratings');
+      ZF.removeStyle('zf-critical');
       ZF.log('RatingHider: destroyed');
     },
 

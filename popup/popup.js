@@ -39,6 +39,7 @@ function applySettings(settings) {
 
 document.addEventListener('DOMContentLoaded', () => {
   chrome.storage.sync.get(DEFAULTS, (stored) => {
+    if (chrome.runtime.lastError) return;
     applySettings({ ...DEFAULTS, ...stored });
   });
 
