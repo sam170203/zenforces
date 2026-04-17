@@ -5,12 +5,9 @@
     ratingHider:        true,
     colorNeutralizer:   true,
     cleanUI:            true,
-    timer:              false,
     submissionFeedback: false,
     successSound:       false,
-    focusMode:          false,
     usernameColor:      '#4a90d9',
-    timerMode:          'stopwatch',
     extrasExpanded:     false,
     theme:              'none',
   };
@@ -19,15 +16,13 @@
     ratingHider:        ZF.RatingHider,
     colorNeutralizer:   ZF.ColorNeutralizer,
     cleanUI:            ZF.CleanUI,
-    timer:              ZF.Timer,
     submissionFeedback: ZF.SubmissionFeedback,
-    focusMode:          ZF.FocusMode,
   };
 
-  let settings = Object.assign({}, DEFAULTS);
-  let storageReady = false;
+  let settingsCache = Object.assign({}, DEFAULTS);
+  let initialized = false;
 
-  const THEME_INLINE_STYLE_ID = 'zf-theme-inline-vars';
+  const THEME_STYLE_ID = 'zf-theme-inline';
 
   const THEME_VARS = {
     'zen-dark': {
@@ -53,69 +48,47 @@
   };
 
   function applyThemeInline(theme) {
-    const style = document.getElementById(THEME_INLINE_STYLE_ID) || (() => {
-      const s = document.createElement('style');
-      s.id = THEME_INLINE_STYLE_ID;
-      document.head.appendChild(s);
-      return s;
-    })();
-
-    const themeData = THEME_VARS[theme];
-    if (!themeData || theme === 'none') {
+    let style = document.getElementById(THEME_STYLE_ID);
+    if (!style) {
+      style = document.createElement('style');
+      style.id = THEME_STYLE_ID;
+      document.head.appendChild(style);
+    }
+    const data = THEME_VARS[theme];
+    if (!data || theme === 'none') {
       style.textContent = '';
       return;
     }
-
-    style.textContent = `
-      :root {
-        --zf-bg: ${themeData.bg} !important;
-        --zf-bg-panel: ${themeData.panel} !important;
-        --zf-bg-alt: ${themeData.alt} !important;
-        --zf-text: ${themeData.text} !important;
-        --zf-text-dim: ${themeData.dim} !important;
-        --zf-accent: ${themeData.accent} !important;
-        --zf-accent2: ${themeData.accent2} !important;
-        --zf-border: ${themeData.border} !important;
-      }
-    `;
+    style.textContent = `:root { --zf-bg: ${data.bg} !important; --zf-bg-panel: ${data.panel} !important; --zf-bg-alt: ${data.alt} !important; --zf-text: ${data.text} !important; --zf-text-dim: ${data.dim} !important; --zf-accent: ${data.accent} !important; --zf-accent2: ${data.accent2} !important; --zf-border: ${data.border} !important; }`;
   }
 
-  ZF.addStyle('zf-critical', `
-    a.rated-user, .rating-link { color: inherit !important; }
-    .user-rank, .rating, .max-rating-box, .userbox-rating,
-    .rating-overview, .personal-sidebar .rating-badge,
-    .user-rank-block, div.info .rating, .main-info .rating,
-    .rating-badge, .contest-cell .rating { display: none !important; }
-  `);
-
   function applyBodyTheme(theme) {
-    const themeClasses = ['zen-dark', 'deep-blue', 'soft-light', 'warm-minimal', 'midnight-pro'];
-    document.body.classList.remove(...themeClasses.map(t => `zf-theme-${t}`));
-    if (theme !== 'none' && themeClasses.includes(theme)) {
+    const themes = ['zen-dark', 'deep-blue', 'soft-light', 'warm-minimal', 'midnight-pro'];
+    themes.forEach(t => document.body.classList.remove(`zf-theme-${t}`));
+    if (theme !== 'none' && themes.includes(theme)) {
       document.body.classList.add(`zf-theme-${theme}`);
     }
   }
 
-  function initModules(node) {
+  ZF.addStyle('zf-critical', `.user-rank, .rating, .max-rating-box, .userbox-rating, .rating-overview, .personal-sidebar .rating-badge, .user-rank-block, div.info .rating, .main-info .rating, .rating-badge { display: none !important; }`);
+
+  function initAllModules(node) {
     node = node || document;
     for (const key in REGISTRY) {
-      if (key === 'timer') continue;
       const mod = REGISTRY[key];
-      if (settings[key] && mod._active) {
-        if (node === document) mod.init(settings, document);
-        else mod.init(settings, node);
+      if (settingsCache[key]) {
+        mod.init(settingsCache, node);
       }
     }
   }
 
-  function reinitAllModules() {
+  function reinitAll() {
     for (const key in REGISTRY) {
-      if (key === 'timer') continue;
       const mod = REGISTRY[key];
-      if (settings[key]) {
-        mod._active = false;
-        mod._processed = new WeakSet();
-        mod.init(settings, document);
+      mod._active = false;
+      mod._processed = new WeakSet();
+      if (settingsCache[key]) {
+        mod.init(settingsCache, document);
       }
     }
   }
@@ -129,10 +102,9 @@
         for (const node of m.addedNodes) {
           if (node.nodeType !== 1) continue;
           for (const key in REGISTRY) {
-            if (key === 'timer') continue;
             const mod = REGISTRY[key];
-            if (settings[key] && mod._active) {
-              mod.init(settings, node);
+            if (settingsCache[key] && mod._active && mod.init) {
+              mod.init(settingsCache, node);
             }
           }
         }
@@ -148,101 +120,49 @@
     ZF.log('Nav: ' + lastUrl);
     setupObserver();
     if (document.body) observer.observe(document.body, { childList: true, subtree: true });
-    reinitAllModules();
-    for (const key in REGISTRY) {
-      const mod = REGISTRY[key];
-      if (mod.onPageChange) mod.onPageChange(lastUrl);
-    }
+    reinitAll();
+    applyBodyTheme(settingsCache.theme);
+    applyThemeInline(settingsCache.theme);
   }
 
   const debouncedNav = ZF.debounce(handleNavigation, 100);
 
   window.addEventListener('popstate', debouncedNav);
   window.addEventListener('hashchange', debouncedNav);
-  setInterval(() => {
-    if (location.href !== lastUrl) debouncedNav();
-  }, 500);
+  setInterval(() => { if (location.href !== lastUrl) debouncedNav(); }, 500);
 
-  const origPushState = history.pushState;
-  history.pushState = function() {
-    origPushState.apply(history, arguments);
-    debouncedNav();
-  };
-  const origReplaceState = history.replaceState;
-  history.replaceState = function() {
-    origReplaceState.apply(history, arguments);
-    debouncedNav();
-  };
+  const origPush = history.pushState;
+  history.pushState = function() { origPush.apply(history, arguments); debouncedNav(); };
+  const origReplace = history.replaceState;
+  history.replaceState = function() { origReplace.apply(history, arguments); debouncedNav(); };
 
-  chrome.storage.onChanged.addListener((changes) => {
-    for (const key in changes) {
-      settings[key] = changes[key].newValue;
-    }
-
-    for (const key in REGISTRY) {
-      if (!(key in changes)) continue;
-      const mod = REGISTRY[key];
-      if (settings[key]) {
-        mod.init(settings, document);
-      } else {
-        mod.destroy();
-      }
-    }
-
-    if ('usernameColor' in changes) {
-      ZF.ColorNeutralizer.update(settings);
-    }
-    if ('timerMode' in changes) ZF.Timer.update(settings);
-    if ('successSound' in changes) ZF.SubmissionFeedback.update(settings);
-    if ('theme' in changes) {
-      applyBodyTheme(settings.theme);
-      applyThemeInline(settings.theme);
-      ZF.ThemeManager.update(settings);
-    }
-  });
-
-  function boot(stored) {
-    settings = Object.assign({}, DEFAULTS, stored);
-    storageReady = true;
-
-    if (!settings.ratingHider) ZF.removeStyle('zf-critical');
-
-    applyBodyTheme(settings.theme);
-    applyThemeInline(settings.theme);
-
+  function boot(data) {
+    settingsCache = Object.assign({}, DEFAULTS, data);
+    initialized = true;
+    applyBodyTheme(settingsCache.theme);
+    applyThemeInline(settingsCache.theme);
     setupObserver();
-    if (document.body) {
-      observer.observe(document.body, { childList: true, subtree: true });
-    }
-
-    initModules(document);
-    ZF.ThemeManager.init(settings);
-    if (settings.timer) ZF.Timer.onPageChange(location.href);
+    if (document.body) observer.observe(document.body, { childList: true, subtree: true });
+    initAllModules(document);
   }
 
-  applyThemeInline(settings.theme);
+  applyThemeInline(settingsCache.theme);
 
   if (document.body) {
     boot(DEFAULTS);
   } else {
-    document.addEventListener('DOMContentLoaded', function() {
-      boot(DEFAULTS);
-    }, { once: true });
+    document.addEventListener('DOMContentLoaded', function() { boot(DEFAULTS); }, { once: true });
   }
 
-  chrome.storage.sync.get(DEFAULTS, function(stored) {
+  chrome.storage.sync.get(null, function(data) {
     if (chrome.runtime.lastError) {
       ZF.log('Storage error: ' + chrome.runtime.lastError.message);
       return;
     }
-    if (storageReady) {
-      settings = Object.assign({}, DEFAULTS, stored);
-      applyBodyTheme(settings.theme);
-      applyThemeInline(settings.theme);
-      reinitAllModules();
-      ZF.ThemeManager.init(settings);
+    if (initialized) {
+      reinitAll();
     } else {
-      boot(stored);
+      boot(data);
     }
   });
 

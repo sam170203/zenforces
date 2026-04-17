@@ -2,19 +2,16 @@ const DEFAULTS = {
   ratingHider:        true,
   colorNeutralizer:   true,
   cleanUI:            true,
-  timer:              false,
   submissionFeedback: false,
   successSound:       false,
-  focusMode:          false,
   usernameColor:      '#4a90d9',
-  timerMode:          'stopwatch',
   extrasExpanded:     false,
   theme:              'none',
 };
 
 const FEATURE_KEYS = [
   'ratingHider', 'colorNeutralizer', 'cleanUI',
-  'timer', 'submissionFeedback', 'successSound', 'focusMode',
+  'submissionFeedback', 'successSound',
 ];
 
 let pendingWrite = null;
@@ -67,10 +64,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!el) return;
     el.addEventListener('change', () => {
       scheduleSave({ [key]: el.checked });
-      if (key === 'colorNeutralizer') {
-        const colorInput = document.getElementById('username-color');
-        colorInput.disabled = !el.checked;
-      }
     });
   });
 
@@ -97,12 +90,4 @@ document.addEventListener('DOMContentLoaded', () => {
     extrasContent.classList.toggle('zf-collapsed', !next);
     scheduleSave({ extrasExpanded: next });
   });
-});
-
-chrome.storage.onChanged.addListener((changes, areaName) => {
-  if (areaName !== 'sync') return;
-  if ('colorNeutralizer' in changes) {
-    const colorInput = document.getElementById('username-color');
-    if (colorInput) colorInput.disabled = !changes.colorNeutralizer.newValue;
-  }
 });

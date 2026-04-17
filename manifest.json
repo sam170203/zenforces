@@ -16,9 +16,7 @@
         "modules/ratingHider.js",
         "modules/colorNeutralizer.js",
         "modules/cleanUI.js",
-        "modules/timer.js",
         "modules/submissionFeedback.js",
-        "modules/focusMode.js",
         "modules/themeManager.js",
         "content.js"
       ],
