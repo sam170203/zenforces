@@ -10,6 +10,13 @@ ZF.SELECTORS = {
     '.rating',
     '[class*="rated-user"]',
     '.personal-sidebar .rating-badge',
+    '.main-info .user-rank',
+    '.info .rating',
+    '.max-rating-box',
+    '.userbox-rating',
+    '#userbox .user-rank',
+    '.profile-info .rating',
+    '.rating-overview td:nth-child(2)',
   ],
 
   // Rank label text (Newbie, Pupil, Expert, etc.)
@@ -17,6 +24,8 @@ ZF.SELECTORS = {
     '.user-rank',
     '.title',
     '.roundbox .title',
+    '.main-info .user-rank',
+    '.info .user-rank',
   ],
 
   // Username elements that carry rank color via class

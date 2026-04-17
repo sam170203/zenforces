@@ -104,6 +104,27 @@ body {
   max-height: 0;
 }
 
+/* Select row */
+.zf-select-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 16px;
+}
+.zf-select {
+  background: #2a2a2a;
+  color: #e0e0e0;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 3px 6px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.zf-select:focus {
+  outline: 2px solid #4a90d9;
+  outline-offset: 2px;
+}
+
 /* Color row */
 .zf-color-row {
   display: flex;

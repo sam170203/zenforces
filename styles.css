@@ -6,6 +6,18 @@ body.zf-hide-ratings .zf-rating-hidden {
   visibility: hidden;
 }
 
+/* Direct CSS fallback — catches profile/sidebar elements without JS tagging */
+body.zf-hide-ratings .user-rank,
+body.zf-hide-ratings .main-info .user-rank,
+body.zf-hide-ratings .info .user-rank,
+body.zf-hide-ratings #userbox .user-rank,
+body.zf-hide-ratings .max-rating-box,
+body.zf-hide-ratings .userbox-rating,
+body.zf-hide-ratings .rating-overview,
+body.zf-hide-ratings .personal-sidebar .rating-badge {
+  visibility: hidden !important;
+}
+
 /* Remove rank-based color from username links */
 body.zf-hide-ratings a.rated-user,
 body.zf-hide-ratings .rating-link {
@@ -87,3 +99,72 @@ body.zf-focus-mode .zf-focus-hidden {
 #zf-toast.zf-accepted { background: #2e7d32; }
 #zf-toast.zf-rejected { background: #c62828; }
 #zf-toast.zf-other    { background: #555; }
+
+/* ── Themes ───────────────────────────────────────────────────────── */
+body.zf-theme-dark {
+  --zf-bg:      #1a1b1e;
+  --zf-bg2:     #26272b;
+  --zf-text:    #c9d1d9;
+  --zf-border:  #30363d;
+  background-color: var(--zf-bg) !important;
+  color: var(--zf-text) !important;
+}
+body.zf-theme-dark .roundbox,
+body.zf-theme-dark .datatable,
+body.zf-theme-dark #sidebar,
+body.zf-theme-dark .content-with-sidebar {
+  background-color: var(--zf-bg2) !important;
+  border-color: var(--zf-border) !important;
+  color: var(--zf-text) !important;
+}
+
+body.zf-theme-light {
+  --zf-bg:      #f5f5f0;
+  --zf-bg2:     #ffffff;
+  --zf-text:    #24292e;
+  --zf-border:  #ddd;
+  background-color: var(--zf-bg) !important;
+  color: var(--zf-text) !important;
+}
+body.zf-theme-light .roundbox,
+body.zf-theme-light .datatable,
+body.zf-theme-light #sidebar,
+body.zf-theme-light .content-with-sidebar {
+  background-color: var(--zf-bg2) !important;
+  border-color: var(--zf-border) !important;
+  color: var(--zf-text) !important;
+}
+
+body.zf-theme-blue {
+  --zf-bg:      #0d1117;
+  --zf-bg2:     #111827;
+  --zf-text:    #bfdbfe;
+  --zf-border:  #1e3a5f;
+  background-color: var(--zf-bg) !important;
+  color: var(--zf-text) !important;
+}
+body.zf-theme-blue .roundbox,
+body.zf-theme-blue .datatable,
+body.zf-theme-blue #sidebar,
+body.zf-theme-blue .content-with-sidebar {
+  background-color: var(--zf-bg2) !important;
+  border-color: var(--zf-border) !important;
+  color: var(--zf-text) !important;
+}
+
+body.zf-theme-warm {
+  --zf-bg:      #1c1510;
+  --zf-bg2:     #251d15;
+  --zf-text:    #e8d5b7;
+  --zf-border:  #3d2e1e;
+  background-color: var(--zf-bg) !important;
+  color: var(--zf-text) !important;
+}
+body.zf-theme-warm .roundbox,
+body.zf-theme-warm .datatable,
+body.zf-theme-warm #sidebar,
+body.zf-theme-warm .content-with-sidebar {
+  background-color: var(--zf-bg2) !important;
+  border-color: var(--zf-border) !important;
+  color: var(--zf-text) !important;
+}

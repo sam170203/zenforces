@@ -8,6 +8,7 @@ const DEFAULTS = {
   usernameColor:      '#4a90d9',
   timerMode:          'stopwatch',
   extrasExpanded:     false,
+  theme:              'none',
 };
 
 const FEATURE_KEYS = [
@@ -28,6 +29,10 @@ function applySettings(settings) {
   colorInput.value   = settings.usernameColor || DEFAULTS.usernameColor;
   colorPreview.style.background = colorInput.value;
   colorInput.disabled = !isColorOn;
+
+  // Theme select
+  const themeSelect = document.getElementById('theme-select');
+  themeSelect.value = settings.theme || 'none';
 
   // Extras expand state
   const extrasToggle  = document.getElementById('extras-toggle');
@@ -54,6 +59,11 @@ document.addEventListener('DOMContentLoaded', () => {
         colorInput.disabled = !el.checked;
       }
     });
+  });
+
+  // Theme select
+  document.getElementById('theme-select').addEventListener('change', (e) => {
+    chrome.storage.sync.set({ theme: e.target.value });
   });
 
   // Color picker — update preview + storage on every input event

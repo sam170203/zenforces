@@ -19,6 +19,7 @@
         "modules/timer.js",
         "modules/submissionFeedback.js",
         "modules/focusMode.js",
+        "modules/themeManager.js",
         "content.js"
       ],
       "css": ["styles.css"],

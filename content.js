@@ -9,6 +9,7 @@
     usernameColor:      '#4a90d9',
     timerMode:          'stopwatch',
     extrasExpanded:     false,
+    theme:              'none',
   };
 
   // Feature registry — maps key → module object
@@ -25,7 +26,8 @@
   // Removed only if ratingHider is confirmed disabled after storage loads.
   ZF.addStyle('zf-critical', `
     a.rated-user, .rating-link { color: inherit !important; }
-    .user-rank, .rating { visibility: hidden; }
+    .user-rank, .rating, .max-rating-box, .userbox-rating,
+    .rating-overview, .personal-sidebar .rating-badge { visibility: hidden; }
   `);
 
   let settings = { ...DEFAULTS };
@@ -92,6 +94,7 @@
     // Sub-setting live updates
     if ('usernameColor' in changes) ZF.ColorNeutralizer.update(settings);
     if ('timerMode' in changes) ZF.Timer.update(settings);
+    if ('theme' in changes) ZF.ThemeManager.update(settings);
   });
 
   function boot(stored) {
@@ -99,6 +102,7 @@
     if (!settings.ratingHider) ZF.removeStyle('zf-critical');
     observer.observe(document.body, { childList: true, subtree: true });
     initModules();
+    ZF.ThemeManager.init(settings);
     if (settings.timer) ZF.Timer.onPageChange(location.href);
   }
 
