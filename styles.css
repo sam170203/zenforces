@@ -173,17 +173,17 @@ body.zf-focus-mode .zf-focus-hidden {
    PREMIUM THEMES - Richer, Vibrant, Modern
    ══════════════════════════════════════════════════════════════════ */
 
-/* 1 · Zen Dark - Deep, elegant blue-black */
+/* 1 · Zen Dark - Deep, sleek, premium dark UI */
 body.zf-theme-zen-dark {
   --zf-bg:       #020617;
   --zf-bg-panel: #0f172a;
-  --zf-bg-alt:   #1e293b;
-  --zf-text:     #f1f5f9;
+  --zf-bg-alt:   #111827;
+  --zf-text:     #e2e8f0;
   --zf-text-dim: #94a3b8;
   --zf-accent:   #3b82f6;
   --zf-accent2:  #60a5fa;
-  --zf-border:   #334155;
-  --zf-shadow:   0 4px 16px rgba(0,0,0,0.4);
+  --zf-border:   #1f2937;
+  --zf-shadow:   0 6px 16px rgba(0,0,0,0.4);
 }
 
 /* 2 · Deep Blue Focus - Navy immersion with neon accents */
