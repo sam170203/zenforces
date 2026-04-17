@@ -17,13 +17,20 @@ const FEATURE_KEYS = [
   'timer', 'submissionFeedback', 'successSound', 'focusMode',
 ];
 
+let pendingWrite = null;
 let saveTimeout = null;
 
-function saveToStorage(data) {
+function flushToStorage() {
+  if (!pendingWrite) return;
+  const data = pendingWrite;
+  pendingWrite = null;
+  chrome.storage.sync.set(data);
+}
+
+function scheduleSave(data) {
+  pendingWrite = Object.assign({}, pendingWrite || {}, data);
   clearTimeout(saveTimeout);
-  saveTimeout = setTimeout(() => {
-    chrome.storage.sync.set(data);
-  }, 300);
+  saveTimeout = setTimeout(flushToStorage, 500);
 }
 
 function applySettings(settings) {
@@ -59,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const el = document.getElementById(`toggle-${key}`);
     if (!el) return;
     el.addEventListener('change', () => {
-      saveToStorage({ [key]: el.checked });
+      scheduleSave({ [key]: el.checked });
       if (key === 'colorNeutralizer') {
         const colorInput = document.getElementById('username-color');
         colorInput.disabled = !el.checked;
@@ -68,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.getElementById('theme-select').addEventListener('change', (e) => {
-    saveToStorage({ theme: e.target.value });
+    scheduleSave({ theme: e.target.value });
   });
 
   const colorInput   = document.getElementById('username-color');
@@ -78,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   colorInput.addEventListener('change', () => {
     if (/^#[0-9a-fA-F]{6}$/.test(colorInput.value)) {
-      saveToStorage({ usernameColor: colorInput.value });
+      scheduleSave({ usernameColor: colorInput.value });
     }
   });
 
@@ -88,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const next = extrasToggle.getAttribute('aria-expanded') !== 'true';
     extrasToggle.setAttribute('aria-expanded', String(next));
     extrasContent.classList.toggle('zf-collapsed', !next);
-    saveToStorage({ extrasExpanded: next });
+    scheduleSave({ extrasExpanded: next });
   });
 });
 
