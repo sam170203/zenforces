@@ -83,8 +83,7 @@
       if (!(key in changes)) continue;
       const mod = REGISTRY[key];
       if (settings[key]) {
-        if (key === 'timer') mod.onPageChange(location.href);
-        else mod.init(settings);
+        mod.init(settings);
       } else {
         mod.destroy();
       }
@@ -111,7 +110,8 @@
       ZF.log(`Storage error: ${chrome.runtime.lastError.message}`);
       return;
     }
-    // Re-boot with real stored settings
+    // Re-boot with real stored settings. All module init/destroy must stay synchronous
+    // for this two-phase boot to be safe.
     for (const mod of Object.values(REGISTRY)) mod.destroy();
     boot(stored);
   });
