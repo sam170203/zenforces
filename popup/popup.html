@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zenforces</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="zf-popup">
+
+    <header class="zf-header">
+      <span class="zf-logo">⚡ Zenforces</span>
+      <span class="zf-version">v1.0</span>
+    </header>
+
+    <section class="zf-section" id="core-section">
+      <div class="zf-toggle-row" data-key="ratingHider">
+        <label class="zf-label" for="toggle-ratingHider">Hide Ratings &amp; Ranks</label>
+        <input type="checkbox" id="toggle-ratingHider" class="zf-toggle"
+               role="switch" aria-label="Hide Ratings and Ranks">
+      </div>
+      <div class="zf-toggle-row" data-key="colorNeutralizer">
+        <label class="zf-label" for="toggle-colorNeutralizer">Neutralize Username Colors</label>
+        <input type="checkbox" id="toggle-colorNeutralizer" class="zf-toggle"
+               role="switch" aria-label="Neutralize Username Colors">
+      </div>
+      <div class="zf-toggle-row" data-key="cleanUI">
+        <label class="zf-label" for="toggle-cleanUI">Clean UI Mode</label>
+        <input type="checkbox" id="toggle-cleanUI" class="zf-toggle"
+               role="switch" aria-label="Clean UI Mode">
+      </div>
+    </section>
+
+    <section class="zf-section" id="extras-section">
+      <button class="zf-extras-toggle" id="extras-toggle" aria-expanded="false">
+        <span>Optional Enhancements</span>
+        <span class="zf-chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="zf-extras-content zf-collapsed" id="extras-content">
+        <div class="zf-toggle-row" data-key="timer">
+          <label class="zf-label" for="toggle-timer">Floating Timer</label>
+          <input type="checkbox" id="toggle-timer" class="zf-toggle"
+                 role="switch" aria-label="Floating Timer">
+        </div>
+        <div class="zf-toggle-row" data-key="submissionFeedback">
+          <label class="zf-label" for="toggle-submissionFeedback">Submission Feedback</label>
+          <input type="checkbox" id="toggle-submissionFeedback" class="zf-toggle"
+                 role="switch" aria-label="Submission Feedback Toasts">
+        </div>
+        <div class="zf-toggle-row" data-key="focusMode">
+          <label class="zf-label" for="toggle-focusMode">Focus Mode</label>
+          <input type="checkbox" id="toggle-focusMode" class="zf-toggle"
+                 role="switch" aria-label="Focus Mode">
+        </div>
+      </div>
+    </section>
+
+    <section class="zf-section" id="color-section">
+      <div class="zf-color-row">
+        <label class="zf-label" for="username-color">Username Color</label>
+        <div class="zf-color-picker-wrap">
+          <span class="zf-color-preview" id="color-preview" aria-hidden="true"></span>
+          <input type="color" id="username-color"
+                 aria-label="Custom username color">
+        </div>
+      </div>
+    </section>
+
+    <footer class="zf-footer">
+      Focus on solving, not rating.
+    </footer>
+
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
