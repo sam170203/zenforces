@@ -65,6 +65,7 @@ ZF.SubmissionFeedback = (() => {
       clearInterval(_pollInterval);
       clearTimeout(_hideTimeout);
       _pollInterval = null;
+      _hideTimeout = null;
       _lastVerdict = null;
       if (_toastEl) { _toastEl.remove(); _toastEl = null; }
       ZF.log('SubmissionFeedback: destroyed');
