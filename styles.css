@@ -285,6 +285,18 @@ body[class*="zf-theme-"] .problem-statement {
   box-shadow: var(--zf-shadow) !important;
 }
 
+/* Problem statement — inner divs/sections inherit panel, don't go white */
+body[class*="zf-theme-"] .problem-statement div:not([class*="MathJax"]):not([class*="mjx"]):not([id*="MathJax"]),
+body[class*="zf-theme-"] .problem-statement .section {
+  background-color: transparent !important;
+}
+
+/* Problem statement — images: transparent bg so no white canvas bleeds */
+body[class*="zf-theme-"] .problem-statement img {
+  background-color: transparent !important;
+  border-radius: 4px;
+}
+
 /* Problem statement — text content */
 body[class*="zf-theme-"] .problem-statement,
 body[class*="zf-theme-"] .problem-statement p,
@@ -305,11 +317,11 @@ body[class*="zf-theme-"] .problem-statement div:not([class*="MathJax"]):not([cla
   color: var(--zf-text) !important;
 }
 
-/* Problem statement — test case blocks */
+/* Problem statement — test case blocks (--zf-bg-alt gives visual depth vs panel) */
 body[class*="zf-theme-"] .problem-statement pre,
 body[class*="zf-theme-"] .problem-statement .sample-tests pre,
 body[class*="zf-theme-"] .problem-statement code {
-  background: var(--zf-bg-alt) !important;
+  background-color: var(--zf-bg-alt) !important;
   color: var(--zf-text) !important;
   border: 1px solid var(--zf-border) !important;
   border-radius: 6px !important;
@@ -466,4 +478,38 @@ body[class*="zf-theme-"] input[type="submit"] {
 }
 body[class*="zf-theme-"] input[type="submit"]:hover {
   filter: brightness(1.1);
+}
+
+/* ── Roundbox corner decorators ─────────────────────────────────────── */
+/* CF uses .roundbox-tt/.roundbox-rb for old-style corners — these go white */
+body[class*="zf-theme-"] .roundbox-tt,
+body[class*="zf-theme-"] .roundbox-tt div,
+body[class*="zf-theme-"] .roundbox-rb,
+body[class*="zf-theme-"] .roundbox-rb div {
+  background-color: var(--zf-bg-panel) !important;
+  border-color: var(--zf-border) !important;
+}
+
+/* ── Menu box (left sidebar widget) ─────────────────────────────────── */
+body[class*="zf-theme-"] .menu-box,
+body[class*="zf-theme-"] .menu-box .title {
+  background-color: var(--zf-bg-panel) !important;
+  border: 1px solid var(--zf-border) !important;
+  color: var(--zf-text) !important;
+}
+
+/* ── Inline-style white background overrides ─────────────────────────
+   CF occasionally injects style="background-color:#fff" directly on
+   elements. Catch the common string variants without touching images. */
+body[class*="zf-theme-"] *:not(img):not(svg)[style*="background-color: white"],
+body[class*="zf-theme-"] *:not(img):not(svg)[style*="background-color:white"],
+body[class*="zf-theme-"] *:not(img):not(svg)[style*="background-color: #fff"],
+body[class*="zf-theme-"] *:not(img):not(svg)[style*="background-color:#fff"],
+body[class*="zf-theme-"] *:not(img):not(svg)[style*="background-color: #ffffff"],
+body[class*="zf-theme-"] *:not(img):not(svg)[style*="background-color:#ffffff"],
+body[class*="zf-theme-"] *:not(img):not(svg)[style*="background: white"],
+body[class*="zf-theme-"] *:not(img):not(svg)[style*="background:white"],
+body[class*="zf-theme-"] *:not(img):not(svg)[style*="background: #fff"],
+body[class*="zf-theme-"] *:not(img):not(svg)[style*="background:#fff"] {
+  background-color: var(--zf-bg-panel) !important;
 }
