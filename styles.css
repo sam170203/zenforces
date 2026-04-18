@@ -243,17 +243,17 @@ body.zf-theme-midnight-pro {
 body[class*="zf-theme-"] {
   background-color: var(--zf-bg) !important;
   background-image: radial-gradient(ellipse at top, var(--zf-bg-panel), var(--zf-bg) 60%) !important;
-  color: var(--zf-text) !important;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/* Layout wrappers */
+/* Layout wrappers — transparent so body gradient shows through */
 body[class*="zf-theme-"] #body-wrapper,
 body[class*="zf-theme-"] #pageContent,
 body[class*="zf-theme-"] .content-with-sidebar,
 body[class*="zf-theme-"] .wrap {
   background-color: transparent !important;
   background-image: none !important;
+  color: var(--zf-text);
 }
 
 /* Panels / cards */
@@ -277,13 +277,58 @@ body[class*="zf-theme-"] #sidebar {
   box-shadow: 2px 0 12px rgba(0,0,0,0.1);
 }
 
-/* Problem statement */
+/* Problem statement — container */
 body[class*="zf-theme-"] .problem-statement {
   background-color: var(--zf-bg-panel) !important;
-  color: var(--zf-text) !important;
   border: 1px solid var(--zf-border) !important;
   border-radius: 8px !important;
   box-shadow: var(--zf-shadow) !important;
+}
+
+/* Problem statement — text content */
+body[class*="zf-theme-"] .problem-statement,
+body[class*="zf-theme-"] .problem-statement p,
+body[class*="zf-theme-"] .problem-statement li,
+body[class*="zf-theme-"] .problem-statement .header,
+body[class*="zf-theme-"] .problem-statement .title,
+body[class*="zf-theme-"] .problem-statement .section-title,
+body[class*="zf-theme-"] .problem-statement .property-title,
+body[class*="zf-theme-"] .problem-statement table,
+body[class*="zf-theme-"] .problem-statement td,
+body[class*="zf-theme-"] .problem-statement th {
+  color: var(--zf-text) !important;
+}
+
+/* Problem statement — inline spans/divs, exclude MathJax completely */
+body[class*="zf-theme-"] .problem-statement span:not([class*="MathJax"]):not([class*="mjx"]):not([id*="MathJax"]),
+body[class*="zf-theme-"] .problem-statement div:not([class*="MathJax"]):not([class*="mjx"]):not([id*="MathJax"]):not(.problem-statement) {
+  color: var(--zf-text) !important;
+}
+
+/* Problem statement — test case blocks */
+body[class*="zf-theme-"] .problem-statement pre,
+body[class*="zf-theme-"] .problem-statement .sample-tests pre,
+body[class*="zf-theme-"] .problem-statement code {
+  background: var(--zf-bg-alt) !important;
+  color: var(--zf-text) !important;
+  border: 1px solid var(--zf-border) !important;
+  border-radius: 6px !important;
+  padding: 8px 12px !important;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* MathJax / KaTeX — never touch these, they render their own SVG/HTML */
+body[class*="zf-theme-"] .MathJax,
+body[class*="zf-theme-"] .MathJax_Preview,
+body[class*="zf-theme-"] .MathJax_SVG,
+body[class*="zf-theme-"] .MJX-TEX,
+body[class*="zf-theme-"] mjx-container,
+body[class*="zf-theme-"] mjx-container *,
+body[class*="zf-theme-"] .katex,
+body[class*="zf-theme-"] .katex * {
+  color: unset !important;
+  background: unset !important;
 }
 
 /* Data tables — problem list, submissions, standings */
@@ -324,8 +369,7 @@ body[class*="zf-theme-"] td.status-verdict-cell.verdict-rejected {
   color: inherit !important;
 }
 
-/* Code / pre blocks */
-body[class*="zf-theme-"] pre,
+/* Code editor (outside problem statements) */
 body[class*="zf-theme-"] .CodeMirror {
   background-color: var(--zf-bg-alt) !important;
   color: var(--zf-text) !important;
