@@ -3,146 +3,211 @@
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   font-size: 13px;
-  background: #0f0f11;
-  color: #c8c8d8;
+  background: #0c0c10;
+  color: #c4c4d4;
   width: 320px;
+  -webkit-font-smoothing: antialiased;
 }
 
-.zf-popup { display: flex; flex-direction: column; }
+.zf-popup {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
 
-/* ── Header ─────────────────────────────────────────────────────── */
+/* ── Header ──────────────────────────────────────────────────────────── */
 .zf-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 13px 16px 11px;
-  border-bottom: 1px solid #1c1c22;
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid #191920;
 }
-.zf-logo    { font-weight: 700; font-size: 14px; letter-spacing: 0.03em; color: #f0f0f8; }
-.zf-version { font-size: 11px; color: #3a3a46; }
+.zf-header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.zf-logo {
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  color: #f0f0fa;
+}
+.zf-tagline {
+  font-size: 10.5px;
+  color: #38384e;
+  font-style: italic;
+  letter-spacing: 0.01em;
+}
+.zf-version {
+  font-size: 10px;
+  color: #2e2e40;
+  align-self: flex-start;
+  padding-top: 2px;
+}
 
-/* ── Master row ──────────────────────────────────────────────────── */
+/* ── Master toggle row ───────────────────────────────────────────────── */
 .zf-master-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 11px 16px;
-  background: #151518;
-  border-bottom: 1px solid #1c1c22;
+  background: #121218;
+  border-bottom: 1px solid #191920;
 }
 .zf-master-label {
   font-weight: 600;
   font-size: 13px;
-  color: #e4e4f0;
+  color: #e0e0f0;
+  letter-spacing: 0.01em;
 }
 
-/* ── Section labels ──────────────────────────────────────────────── */
+/* ── Section labels ──────────────────────────────────────────────────── */
 .zf-section-label {
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 700;
-  letter-spacing: 0.09em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #36364a;
-  padding: 10px 16px 3px;
+  color: #32324a;
+  padding: 12px 16px 5px;
 }
 
-/* ── Sections ────────────────────────────────────────────────────── */
-.zf-section {
-  border-bottom: 1px solid #1a1a22;
-  padding-bottom: 2px;
-  margin-bottom: 0;
+/* ── Cards ───────────────────────────────────────────────────────────── */
+.zf-card {
+  background: #111118;
+  border: 1px solid #1c1c26;
+  border-radius: 10px;
+  margin: 0 10px 2px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
 }
 
-/* ── Rows ────────────────────────────────────────────────────────── */
+/* ── Rows ────────────────────────────────────────────────────────────── */
 .zf-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 9px 16px;
-  transition: background 0.1s;
+  padding: 10px 14px;
+  transition: background 0.12s;
 }
-.zf-row:hover { background: #14141a; }
-.zf-row label { cursor: pointer; line-height: 1.4; }
+.zf-row + .zf-row {
+  border-top: 1px solid #18181f;
+}
+.zf-row:hover { background: #14141c; }
+.zf-row label {
+  cursor: pointer;
+  color: #b8b8cc;
+  line-height: 1.35;
+  padding-right: 12px;
+}
 
-/* ── Toggle switch ───────────────────────────────────────────────── */
+/* ── Toggle switch ───────────────────────────────────────────────────── */
 .zf-toggle {
   appearance: none;
   -webkit-appearance: none;
   width: 38px;
-  height: 21px;
-  background: #28282e;
-  border-radius: 21px;
+  height: 22px;
+  background: #252530;
+  border-radius: 22px;
   position: relative;
   cursor: pointer;
   flex-shrink: 0;
-  transition: background 0.2s ease;
+  transition: background 0.22s ease;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.4);
 }
 .zf-toggle::after {
   content: '';
   position: absolute;
-  width: 15px;
-  height: 15px;
-  background: #555;
+  width: 16px;
+  height: 16px;
+  background: #555568;
   border-radius: 50%;
   top: 3px;
   left: 3px;
-  transition: transform 0.2s ease, background 0.2s ease;
+  transition: transform 0.22s ease, background 0.22s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.5);
 }
-.zf-toggle:checked           { background: #3b82f6; }
-.zf-toggle:checked::after    { background: #fff; transform: translateX(17px); }
-.zf-toggle-master:checked    { background: #22c55e; }
-.zf-toggle:focus-visible     { outline: 2px solid #3b82f6; outline-offset: 2px; }
+.zf-toggle:checked {
+  background: #3b79f6;
+}
+.zf-toggle:checked::after {
+  background: #ffffff;
+  transform: translateX(16px);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.35);
+}
+.zf-toggle-master:checked {
+  background: #22c55e;
+}
+.zf-toggle:focus-visible {
+  outline: 2px solid #3b79f6;
+  outline-offset: 2px;
+}
 
-/* ── Disabled feature body when extension is off ─────────────────── */
+/* ── Feature body: dim + no-interact when master off ────────────────── */
 #zf-feature-body.zf-disabled {
-  opacity: 0.38;
+  opacity: 0.35;
   pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+#zf-feature-body {
+  transition: opacity 0.2s ease;
 }
 
-/* ── Select ──────────────────────────────────────────────────────── */
+/* ── Select ──────────────────────────────────────────────────────────── */
 .zf-select {
-  background: #18181e;
-  color: #c8c8d8;
-  border: 1px solid #2a2a34;
-  border-radius: 6px;
-  padding: 4px 8px;
+  background: #0e0e16;
+  color: #b8b8cc;
+  border: 1px solid #242432;
+  border-radius: 7px;
+  padding: 5px 8px;
   font-size: 12px;
   cursor: pointer;
   outline: none;
-  transition: border-color 0.15s;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
 }
-.zf-select:focus { border-color: #3b82f6; }
+.zf-select:focus {
+  border-color: #3b79f6;
+  box-shadow: 0 0 0 2px rgba(59,121,246,0.2);
+}
+.zf-select:hover { border-color: #30304a; }
 
-/* ── Color picker ────────────────────────────────────────────────── */
+/* ── Color picker ────────────────────────────────────────────────────── */
 .zf-color-wrap {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 9px;
 }
 .zf-color-dot {
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  border: 1px solid #404050;
+  border: 1.5px solid #303048;
   flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.4);
 }
 #username-color {
   width: 38px;
   height: 24px;
-  border: none;
-  border-radius: 4px;
-  padding: 0;
+  border: 1px solid #242432;
+  border-radius: 6px;
+  padding: 1px;
   cursor: pointer;
-  background: none;
+  background: #0e0e16;
+  transition: border-color 0.15s;
 }
+#username-color:hover { border-color: #30304a; }
+#username-color:focus { outline: none; border-color: #3b79f6; }
 #username-color:disabled { opacity: 0.28; cursor: not-allowed; }
 
-/* ── Footer ──────────────────────────────────────────────────────── */
+/* ── Footer ──────────────────────────────────────────────────────────── */
 .zf-footer {
-  padding: 10px 16px 12px;
+  padding: 11px 16px 13px;
   font-size: 11px;
-  color: #2e2e3c;
+  color: #28283a;
   text-align: center;
-  font-style: italic;
-  border-top: 1px solid #1a1a22;
+  border-top: 1px solid #14141c;
+  margin-top: 8px;
+  letter-spacing: 0.02em;
 }

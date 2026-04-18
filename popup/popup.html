@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Zenforces</title>
   <link rel="stylesheet" href="popup.css">
 </head>
@@ -10,40 +9,43 @@
   <div class="zf-popup">
 
     <header class="zf-header">
-      <span class="zf-logo">⚡ Zenforces</span>
+      <div class="zf-header-text">
+        <span class="zf-logo">⚡ Zenforces</span>
+        <span class="zf-tagline">Focus on solving, not rating</span>
+      </div>
       <span class="zf-version">v1.0</span>
     </header>
 
-    <!-- Master toggle -->
+    <!-- Master toggle — always prominent at top -->
     <div class="zf-master-row">
       <span class="zf-master-label">Extension Enabled</span>
       <input type="checkbox" id="toggle-enabled" class="zf-toggle zf-toggle-master"
-             role="switch" aria-label="Enable Zenforces">
+             role="switch" aria-label="Enable or disable Zenforces">
     </div>
 
     <div id="zf-feature-body">
 
-      <p class="zf-section-label">Features</p>
-      <section class="zf-section">
+      <p class="zf-section-label">Core</p>
+      <div class="zf-card">
         <div class="zf-row">
           <label for="toggle-ratingHider">Hide Ratings &amp; Ranks</label>
-          <input type="checkbox" id="toggle-ratingHider" class="zf-toggle" role="switch"
-                 aria-label="Hide Ratings and Ranks">
+          <input type="checkbox" id="toggle-ratingHider" class="zf-toggle"
+                 role="switch" aria-label="Hide Ratings and Ranks">
         </div>
         <div class="zf-row">
           <label for="toggle-colorNeutralizer">Neutral Username Colors</label>
-          <input type="checkbox" id="toggle-colorNeutralizer" class="zf-toggle" role="switch"
-                 aria-label="Neutralize Username Colors">
+          <input type="checkbox" id="toggle-colorNeutralizer" class="zf-toggle"
+                 role="switch" aria-label="Neutralize Username Colors">
         </div>
         <div class="zf-row">
           <label for="toggle-cleanUI">Clean UI</label>
-          <input type="checkbox" id="toggle-cleanUI" class="zf-toggle" role="switch"
-                 aria-label="Clean UI Mode">
+          <input type="checkbox" id="toggle-cleanUI" class="zf-toggle"
+                 role="switch" aria-label="Clean UI Mode">
         </div>
-      </section>
+      </div>
 
       <p class="zf-section-label">Appearance</p>
-      <section class="zf-section">
+      <div class="zf-card">
         <div class="zf-row">
           <label for="theme-select">Theme</label>
           <select id="theme-select" class="zf-select">
@@ -62,20 +64,20 @@
             <input type="color" id="username-color" aria-label="Custom username color">
           </div>
         </div>
-      </section>
+      </div>
 
       <p class="zf-section-label">Extras</p>
-      <section class="zf-section">
+      <div class="zf-card">
         <div class="zf-row">
           <label for="toggle-submissionFeedback">Submission Toasts</label>
-          <input type="checkbox" id="toggle-submissionFeedback" class="zf-toggle" role="switch"
-                 aria-label="Submission Feedback Toasts">
+          <input type="checkbox" id="toggle-submissionFeedback" class="zf-toggle"
+                 role="switch" aria-label="Submission Feedback Toasts">
         </div>
-      </section>
+      </div>
 
-    </div>
+    </div><!-- /zf-feature-body -->
 
-    <footer class="zf-footer">Focus on solving, not rating.</footer>
+    <footer class="zf-footer">Built for focus 🚀</footer>
 
   </div>
   <script src="popup.js"></script>
