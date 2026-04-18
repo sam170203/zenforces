@@ -1,56 +1,34 @@
 const DEFAULTS = {
+  enabled:            true,
   ratingHider:        true,
   colorNeutralizer:   true,
   cleanUI:            true,
   submissionFeedback: false,
-  successSound:       false,
   usernameColor:      '#4a90d9',
-  extrasExpanded:     false,
   theme:              'none',
 };
 
-const FEATURE_KEYS = [
-  'ratingHider', 'colorNeutralizer', 'cleanUI',
-  'submissionFeedback', 'successSound',
-];
+const FEATURE_KEYS = ['enabled', 'ratingHider', 'colorNeutralizer', 'cleanUI', 'submissionFeedback'];
 
-let pendingWrite = null;
-let saveTimeout = null;
-
-function flushToStorage() {
-  if (!pendingWrite) return;
-  const data = pendingWrite;
-  pendingWrite = null;
-  chrome.storage.sync.set(data);
-}
-
-function scheduleSave(data) {
-  pendingWrite = Object.assign({}, pendingWrite || {}, data);
-  clearTimeout(saveTimeout);
-  saveTimeout = setTimeout(flushToStorage, 500);
-}
-
-function applySettings(settings) {
+function applySettings(s) {
   FEATURE_KEYS.forEach(key => {
-    const el = document.getElementById(`toggle-${key}`);
-    if (el) el.checked = !!settings[key];
+    const el = document.getElementById('toggle-' + key);
+    if (el) el.checked = !!s[key];
   });
 
   const colorInput   = document.getElementById('username-color');
   const colorPreview = document.getElementById('color-preview');
-  const isColorOn    = !!settings.colorNeutralizer;
-  colorInput.value   = settings.usernameColor || DEFAULTS.usernameColor;
+  colorInput.value   = s.usernameColor || DEFAULTS.usernameColor;
   colorPreview.style.background = colorInput.value;
-  colorInput.disabled = !isColorOn;
+  colorInput.disabled = !s.colorNeutralizer;
 
-  const themeSelect = document.getElementById('theme-select');
-  themeSelect.value = settings.theme || 'none';
+  document.getElementById('theme-select').value = s.theme || 'none';
 
-  const extrasToggle  = document.getElementById('extras-toggle');
-  const extrasContent = document.getElementById('extras-content');
-  const expanded = !!settings.extrasExpanded;
-  extrasToggle.setAttribute('aria-expanded', String(expanded));
-  extrasContent.classList.toggle('zf-collapsed', !expanded);
+  setEnabledState(!!s.enabled);
+}
+
+function setEnabledState(on) {
+  document.getElementById('zf-feature-body').classList.toggle('zf-disabled', !on);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -59,18 +37,25 @@ document.addEventListener('DOMContentLoaded', () => {
     applySettings({ ...DEFAULTS, ...stored });
   });
 
+  // Feature toggles
   FEATURE_KEYS.forEach(key => {
-    const el = document.getElementById(`toggle-${key}`);
+    const el = document.getElementById('toggle-' + key);
     if (!el) return;
     el.addEventListener('change', () => {
-      scheduleSave({ [key]: el.checked });
+      chrome.storage.sync.set({ [key]: el.checked });
+      if (key === 'enabled') setEnabledState(el.checked);
+      if (key === 'colorNeutralizer') {
+        document.getElementById('username-color').disabled = !el.checked;
+      }
     });
   });
 
-  document.getElementById('theme-select').addEventListener('change', (e) => {
-    scheduleSave({ theme: e.target.value });
+  // Theme
+  document.getElementById('theme-select').addEventListener('change', e => {
+    chrome.storage.sync.set({ theme: e.target.value });
   });
 
+  // Color picker
   const colorInput   = document.getElementById('username-color');
   const colorPreview = document.getElementById('color-preview');
   colorInput.addEventListener('input', () => {
@@ -78,16 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   colorInput.addEventListener('change', () => {
     if (/^#[0-9a-fA-F]{6}$/.test(colorInput.value)) {
-      scheduleSave({ usernameColor: colorInput.value });
+      chrome.storage.sync.set({ usernameColor: colorInput.value });
     }
-  });
-
-  const extrasToggle  = document.getElementById('extras-toggle');
-  const extrasContent = document.getElementById('extras-content');
-  extrasToggle.addEventListener('click', () => {
-    const next = extrasToggle.getAttribute('aria-expanded') !== 'true';
-    extrasToggle.setAttribute('aria-expanded', String(next));
-    extrasContent.classList.toggle('zf-collapsed', !next);
-    scheduleSave({ extrasExpanded: next });
   });
 });

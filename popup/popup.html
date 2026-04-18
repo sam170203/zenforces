@@ -14,71 +14,68 @@
       <span class="zf-version">v1.0</span>
     </header>
 
-    <section class="zf-section" id="core-section">
-      <div class="zf-toggle-row" data-key="ratingHider">
-        <label class="zf-label" for="toggle-ratingHider">Hide Ratings &amp; Ranks</label>
-        <input type="checkbox" id="toggle-ratingHider" class="zf-toggle"
-               role="switch" aria-label="Hide Ratings and Ranks">
-      </div>
-      <div class="zf-toggle-row" data-key="colorNeutralizer">
-        <label class="zf-label" for="toggle-colorNeutralizer">Neutralize Username Colors</label>
-        <input type="checkbox" id="toggle-colorNeutralizer" class="zf-toggle"
-               role="switch" aria-label="Neutralize Username Colors">
-      </div>
-      <div class="zf-toggle-row" data-key="cleanUI">
-        <label class="zf-label" for="toggle-cleanUI">Clean UI Mode</label>
-        <input type="checkbox" id="toggle-cleanUI" class="zf-toggle"
-               role="switch" aria-label="Clean UI Mode">
-      </div>
-    </section>
+    <!-- Master toggle -->
+    <div class="zf-master-row">
+      <span class="zf-master-label">Extension Enabled</span>
+      <input type="checkbox" id="toggle-enabled" class="zf-toggle zf-toggle-master"
+             role="switch" aria-label="Enable Zenforces">
+    </div>
 
-    <section class="zf-section" id="extras-section">
-      <button class="zf-extras-toggle" id="extras-toggle" aria-expanded="false">
-        <span>Optional Enhancements</span>
-        <span class="zf-chevron" aria-hidden="true">▾</span>
-      </button>
-      <div class="zf-extras-content zf-collapsed" id="extras-content">
-        <div class="zf-toggle-row" data-key="submissionFeedback">
-          <label class="zf-label" for="toggle-submissionFeedback">Submission Feedback</label>
-          <input type="checkbox" id="toggle-submissionFeedback" class="zf-toggle"
-                 role="switch" aria-label="Submission Feedback Toasts">
+    <div id="zf-feature-body">
+
+      <p class="zf-section-label">Features</p>
+      <section class="zf-section">
+        <div class="zf-row">
+          <label for="toggle-ratingHider">Hide Ratings &amp; Ranks</label>
+          <input type="checkbox" id="toggle-ratingHider" class="zf-toggle" role="switch"
+                 aria-label="Hide Ratings and Ranks">
         </div>
-        <div class="zf-toggle-row" data-key="successSound">
-          <label class="zf-label" for="toggle-successSound">Success Sound</label>
-          <input type="checkbox" id="toggle-successSound" class="zf-toggle"
-                 role="switch" aria-label="Success Sound">
+        <div class="zf-row">
+          <label for="toggle-colorNeutralizer">Neutral Username Colors</label>
+          <input type="checkbox" id="toggle-colorNeutralizer" class="zf-toggle" role="switch"
+                 aria-label="Neutralize Username Colors">
         </div>
-      </div>
-    </section>
-
-    <section class="zf-section" id="theme-section">
-      <div class="zf-select-row">
-        <label class="zf-label" for="theme-select">Page Theme</label>
-        <select id="theme-select" class="zf-select">
-          <option value="none">CF Default</option>
-          <option value="zen-dark">Zen Dark</option>
-          <option value="deep-blue">Deep Blue Focus</option>
-          <option value="soft-light">Soft Light</option>
-          <option value="warm-minimal">Warm Minimal</option>
-          <option value="midnight-pro">Midnight Pro</option>
-        </select>
-      </div>
-    </section>
-
-    <section class="zf-section" id="color-section">
-      <div class="zf-color-row">
-        <label class="zf-label" for="username-color">Username Color</label>
-        <div class="zf-color-picker-wrap">
-          <span class="zf-color-preview" id="color-preview" aria-hidden="true"></span>
-          <input type="color" id="username-color"
-                 aria-label="Custom username color">
+        <div class="zf-row">
+          <label for="toggle-cleanUI">Clean UI</label>
+          <input type="checkbox" id="toggle-cleanUI" class="zf-toggle" role="switch"
+                 aria-label="Clean UI Mode">
         </div>
-      </div>
-    </section>
+      </section>
 
-    <footer class="zf-footer">
-      Focus on solving, not rating.
-    </footer>
+      <p class="zf-section-label">Appearance</p>
+      <section class="zf-section">
+        <div class="zf-row">
+          <label for="theme-select">Theme</label>
+          <select id="theme-select" class="zf-select">
+            <option value="none">Default</option>
+            <option value="zen-dark">Zen Dark</option>
+            <option value="deep-blue">Deep Blue</option>
+            <option value="soft-light">Soft Light</option>
+            <option value="warm-minimal">Warm Minimal</option>
+            <option value="midnight-pro">Midnight Pro</option>
+          </select>
+        </div>
+        <div class="zf-row">
+          <label for="username-color">Username Color</label>
+          <div class="zf-color-wrap">
+            <span id="color-preview" class="zf-color-dot" aria-hidden="true"></span>
+            <input type="color" id="username-color" aria-label="Custom username color">
+          </div>
+        </div>
+      </section>
+
+      <p class="zf-section-label">Extras</p>
+      <section class="zf-section">
+        <div class="zf-row">
+          <label for="toggle-submissionFeedback">Submission Toasts</label>
+          <input type="checkbox" id="toggle-submissionFeedback" class="zf-toggle" role="switch"
+                 aria-label="Submission Feedback Toasts">
+        </div>
+      </section>
+
+    </div>
+
+    <footer class="zf-footer">Focus on solving, not rating.</footer>
 
   </div>
   <script src="popup.js"></script>

@@ -17,7 +17,6 @@
         "modules/colorNeutralizer.js",
         "modules/cleanUI.js",
         "modules/submissionFeedback.js",
-        "modules/themeManager.js",
         "content.js"
       ],
       "css": ["styles.css"],

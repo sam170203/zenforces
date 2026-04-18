@@ -242,14 +242,9 @@ body.zf-theme-midnight-pro {
 
 body[class*="zf-theme-"] {
   background-color: var(--zf-bg) !important;
-  background-image: radial-gradient(circle at top, var(--zf-bg-panel), var(--zf-bg)) !important;
-  background-attachment: fixed !important;
+  background-image: radial-gradient(ellipse at top, var(--zf-bg-panel), var(--zf-bg) 60%) !important;
   color: var(--zf-text) !important;
-  transition: background-color 0.3s ease, color 0.2s ease;
-}
-
-body.zf-theme-zen-dark {
-  background-image: radial-gradient(circle at top, #0a0f1c, #010409) !important;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 /* Layout wrappers */
@@ -261,19 +256,18 @@ body[class*="zf-theme-"] .wrap {
   background-image: none !important;
 }
 
-/* Panels / cards with polish */
+/* Panels / cards */
 body[class*="zf-theme-"] .roundbox {
   background-color: var(--zf-bg-panel) !important;
   border: 1px solid var(--zf-border) !important;
   border-radius: 8px !important;
   color: var(--zf-text) !important;
   box-shadow: var(--zf-shadow) !important;
-  transition: all 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 body[class*="zf-theme-"] .roundbox:hover {
   border-color: var(--zf-accent) !important;
-  box-shadow: 0 6px 24px rgba(0,0,0,0.3) !important;
-  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25) !important;
 }
 
 /* Sidebar */
@@ -381,12 +375,13 @@ body[class*="zf-theme-"] select:hover,
 body[class*="zf-theme-"] textarea:hover {
   border-color: var(--zf-accent2, var(--zf-accent)) !important;
 }
-body[class*="zf-theme-"] input:focus,
-body[class*="zf-theme-"] select:focus,
+body[class*="zf-theme-"] input[type="text"]:focus,
+body[class*="zf-theme-"] input[type="search"]:focus,
+body[class*="zf-theme-"] input[type="number"]:focus,
 body[class*="zf-theme-"] textarea:focus {
   border-color: var(--zf-accent) !important;
   outline: none;
-  box-shadow: 0 0 0 3px rgba(59,130,246,0.2) !important;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--zf-accent) 25%, transparent) !important;
 }
 
 /* Section / roundbox titles */
@@ -417,20 +412,14 @@ body[class*="zf-theme-"] a:not(.rated-user):not(.rating-link):hover {
   text-decoration: underline;
 }
 
-/* Buttons */
-body[class*="zf-theme-"] input[type="submit"],
-body[class*="zf-theme-"] input[type="button"],
-body[class*="zf-theme-"] button {
+/* Submit buttons only — leave generic buttons (nav, toggles) unstyled */
+body[class*="zf-theme-"] input[type="submit"] {
   background-color: var(--zf-accent) !important;
   color: #fff !important;
   border: none !important;
   border-radius: 6px !important;
-  transition: all 0.2s ease;
+  transition: filter 0.2s ease;
 }
-body[class*="zf-theme-"] input[type="submit"]:hover,
-body[class*="zf-theme-"] input[type="button"]:hover,
-body[class*="zf-theme-"] button:hover {
+body[class*="zf-theme-"] input[type="submit"]:hover {
   filter: brightness(1.1);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
 }

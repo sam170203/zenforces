@@ -62,8 +62,7 @@ ZF.ColorNeutralizer = (() => {
 
       for (const sel of USERNAME_SELECTORS) {
         try {
-          const els = root.querySelectorAll(sel);
-          els.forEach(el => {
+          root.querySelectorAll(sel).forEach(el => {
             if (this._processed.has(el)) return;
             this._processed.add(el);
             applyInlineColor(el, this._currentColor);
@@ -71,16 +70,16 @@ ZF.ColorNeutralizer = (() => {
         } catch (_) {}
       }
 
+      // Also check if the node itself matches (partial update from MutationObserver)
       if (root !== document) {
-        try {
-          const directMatch = root.matches?.(sel => USERNAME_SELECTORS.includes(sel));
-          if (directMatch) {
-            if (!this._processed.has(root)) {
+        for (const sel of USERNAME_SELECTORS) {
+          try {
+            if (root.matches?.(sel) && !this._processed.has(root)) {
               this._processed.add(root);
               applyInlineColor(root, this._currentColor);
             }
-          }
-        } catch (_) {}
+          } catch (_) {}
+        }
       }
     },
   };
