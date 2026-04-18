@@ -18,7 +18,10 @@
     submissionFeedback: ZF.SubmissionFeedback,
   };
 
-  const THEME_NAMES = ['zen-dark', 'deep-blue', 'soft-light', 'warm-minimal', 'midnight-pro'];
+  const THEME_NAMES = [
+    'zen-dark', 'deep-blue', 'soft-light', 'warm-minimal', 'midnight-pro',
+    'twilight', 'noir', 'oceanic', 'solar',
+  ];
 
   let settings = { ...DEFAULTS };
   let observer = null;

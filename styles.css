@@ -238,6 +238,58 @@ body.zf-theme-midnight-pro {
   --zf-shadow:   0 4px 20px rgba(255,214,10,0.15);
 }
 
+/* 6 · Zen Twilight - Deep purple with pink/blue accents */
+body.zf-theme-twilight {
+  --zf-bg:       #2e1a47;
+  --zf-bg-panel: #3a1c62;
+  --zf-bg-alt:   #4a2472;
+  --zf-text:     #e0daff;
+  --zf-text-dim: #b0a2cc;
+  --zf-accent:   #ff66cc;
+  --zf-accent2:  #66ccff;
+  --zf-border:   #5a2e8a;
+  --zf-shadow:   0 4px 20px rgba(255,102,204,0.12);
+}
+
+/* 7 · Zen Noir - Pure black with neon green (hacker vibe) */
+body.zf-theme-noir {
+  --zf-bg:       #000000;
+  --zf-bg-panel: #090909;
+  --zf-bg-alt:   #111111;
+  --zf-text:     #00ff00;
+  --zf-text-dim: #005500;
+  --zf-accent:   #66ff66;
+  --zf-accent2:  #00ffff;
+  --zf-border:   #003300;
+  --zf-shadow:   0 4px 20px rgba(0,255,0,0.1);
+}
+
+/* 8 · Zen Oceanic - Dark navy with sky-blue/orange accents */
+body.zf-theme-oceanic {
+  --zf-bg:       #001f3f;
+  --zf-bg-panel: #002f5f;
+  --zf-bg-alt:   #003f7f;
+  --zf-text:     #b2dcea;
+  --zf-text-dim: #789fad;
+  --zf-accent:   #2ebbff;
+  --zf-accent2:  #ffa94d;
+  --zf-border:   #1a4f7f;
+  --zf-shadow:   0 4px 20px rgba(46,187,255,0.1);
+}
+
+/* 9 · Zen Solar - Solarized dark with orange/magenta accents */
+body.zf-theme-solar {
+  --zf-bg:       #073642;
+  --zf-bg-panel: #002b36;
+  --zf-bg-alt:   #0a4050;
+  --zf-text:     #eee8d5;
+  --zf-text-dim: #93a1a1;
+  --zf-accent:   #cb4b16;
+  --zf-accent2:  #d33682;
+  --zf-border:   #1a5060;
+  --zf-shadow:   0 4px 20px rgba(203,75,22,0.1);
+}
+
 /* ── Shared application — all themed pages ─────────────────────────── */
 
 body[class*="zf-theme-"] {
@@ -270,11 +322,22 @@ body[class*="zf-theme-"] .roundbox:hover {
   box-shadow: 0 4px 16px rgba(0,0,0,0.25) !important;
 }
 
+/* Header bar */
+body[class*="zf-theme-"] #header {
+  background-color: var(--zf-bg-panel) !important;
+  border-bottom: 1px solid var(--zf-border) !important;
+}
+
 /* Sidebar */
 body[class*="zf-theme-"] #sidebar {
   background-color: var(--zf-bg-panel) !important;
   border-right: 1px solid var(--zf-border) !important;
   box-shadow: 2px 0 12px rgba(0,0,0,0.1);
+}
+
+/* All images — transparent canvas so no white bleeds behind PNGs */
+body[class*="zf-theme-"] img {
+  background-color: transparent !important;
 }
 
 /* Problem statement — container */
