@@ -290,6 +290,45 @@ body.zf-theme-solar {
   --zf-shadow:   0 4px 20px rgba(203,75,22,0.1);
 }
 
+/* 10 · AMOLED Black - Ultra dark OLED-optimised */
+body.zf-theme-amoled {
+  --zf-bg:       #000000;
+  --zf-bg-panel: #050505;
+  --zf-bg-alt:   #0d0d0d;
+  --zf-text:     #e5e7eb;
+  --zf-text-dim: #6b7280;
+  --zf-accent:   #3b82f6;
+  --zf-accent2:  #60a5fa;
+  --zf-border:   #1c1c1c;
+  --zf-shadow:   0 4px 20px rgba(0,0,0,0.9);
+}
+
+/* 11 · Purple Night - Deep indigo with violet accents */
+body.zf-theme-purple-night {
+  --zf-bg:       #0f0a1f;
+  --zf-bg-panel: #1a1033;
+  --zf-bg-alt:   #231444;
+  --zf-text:     #e9d5ff;
+  --zf-text-dim: #a78bfa;
+  --zf-accent:   #a855f7;
+  --zf-accent2:  #c084fc;
+  --zf-border:   #3b1f6e;
+  --zf-shadow:   0 4px 20px rgba(168,85,247,0.15);
+}
+
+/* 12 · Forest Calm - Deep green with emerald accents */
+body.zf-theme-forest {
+  --zf-bg:       #0b1f1a;
+  --zf-bg-panel: #12352d;
+  --zf-bg-alt:   #1a4a3a;
+  --zf-text:     #d1fae5;
+  --zf-text-dim: #6ee7b7;
+  --zf-accent:   #10b981;
+  --zf-accent2:  #34d399;
+  --zf-border:   #1e5c4a;
+  --zf-shadow:   0 4px 20px rgba(16,185,129,0.12);
+}
+
 /* ── Shared application — all themed pages ─────────────────────────── */
 
 body[class*="zf-theme-"] {
@@ -322,10 +361,16 @@ body[class*="zf-theme-"] .roundbox:hover {
   box-shadow: 0 4px 16px rgba(0,0,0,0.25) !important;
 }
 
-/* Header bar */
-body[class*="zf-theme-"] #header {
+/* Header bar — CF uses both #header id and .header class */
+body[class*="zf-theme-"] #header,
+body[class*="zf-theme-"] .header,
+body[class*="zf-theme-"] .logo {
   background-color: var(--zf-bg-panel) !important;
   border-bottom: 1px solid var(--zf-border) !important;
+}
+body[class*="zf-theme-"] .header img,
+body[class*="zf-theme-"] .logo img {
+  background-color: transparent !important;
 }
 
 /* Sidebar */

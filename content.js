@@ -21,6 +21,7 @@
   const THEME_NAMES = [
     'zen-dark', 'deep-blue', 'soft-light', 'warm-minimal', 'midnight-pro',
     'twilight', 'noir', 'oceanic', 'solar',
+    'amoled', 'purple-night', 'forest',
   ];
 
   let settings = { ...DEFAULTS };
