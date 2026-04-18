@@ -606,6 +606,82 @@ body[class*="zf-theme-"] .menu-box .title {
   color: var(--zf-text) !important;
 }
 
+/* ── Footer ──────────────────────────────────────────────────────────── */
+body[class*="zf-theme-"] #footer {
+  background-color: var(--zf-bg-panel) !important;
+  border-top: 1px solid var(--zf-border) !important;
+  color: var(--zf-text-dim) !important;
+}
+
+/* ── Tabs navigation ─────────────────────────────────────────────────── */
+body[class*="zf-theme-"] .tabs-nav,
+body[class*="zf-theme-"] .tabs-nav ul,
+body[class*="zf-theme-"] .tabs-nav li {
+  background-color: var(--zf-bg-alt) !important;
+  border-color: var(--zf-border) !important;
+}
+body[class*="zf-theme-"] .tabs-nav a {
+  color: var(--zf-text-dim) !important;
+}
+body[class*="zf-theme-"] .tabs-nav .selected a,
+body[class*="zf-theme-"] .tabs-nav .current a {
+  background-color: var(--zf-bg-panel) !important;
+  color: var(--zf-accent) !important;
+  border-color: var(--zf-border) !important;
+}
+
+/* ── Blog / editorial / forum pages ─────────────────────────────────── */
+body[class*="zf-theme-"] .blog-entry,
+body[class*="zf-theme-"] .topic-item,
+body[class*="zf-theme-"] .topic-item td {
+  background-color: var(--zf-bg-panel) !important;
+  border-color: var(--zf-border) !important;
+  color: var(--zf-text) !important;
+}
+/* Blog post body text */
+body[class*="zf-theme-"] .ttypography,
+body[class*="zf-theme-"] .ttypography p,
+body[class*="zf-theme-"] .ttypography li,
+body[class*="zf-theme-"] .ttypography blockquote {
+  color: var(--zf-text) !important;
+}
+body[class*="zf-theme-"] .ttypography blockquote {
+  background-color: var(--zf-bg-alt) !important;
+  border-left-color: var(--zf-accent) !important;
+}
+
+/* ── Comment sections ────────────────────────────────────────────────── */
+body[class*="zf-theme-"] .comment-table,
+body[class*="zf-theme-"] .comments-header {
+  background-color: var(--zf-bg-panel) !important;
+  border-color: var(--zf-border) !important;
+}
+body[class*="zf-theme-"] .comment-content,
+body[class*="zf-theme-"] .comment-content p {
+  background-color: var(--zf-bg-alt) !important;
+  color: var(--zf-text) !important;
+  border-color: var(--zf-border) !important;
+}
+
+/* ── User profile / userbox ──────────────────────────────────────────── */
+body[class*="zf-theme-"] .userbox,
+body[class*="zf-theme-"] #userbox,
+body[class*="zf-theme-"] .personal-sidebar,
+body[class*="zf-theme-"] .user-links {
+  background-color: var(--zf-bg-panel) !important;
+  border-color: var(--zf-border) !important;
+  color: var(--zf-text) !important;
+}
+
+/* ── Alert / notice / error boxes ────────────────────────────────────── */
+body[class*="zf-theme-"] .notice,
+body[class*="zf-theme-"] .error-placeholder,
+body[class*="zf-theme-"] .alert {
+  background-color: var(--zf-bg-alt) !important;
+  border: 1px solid var(--zf-border) !important;
+  color: var(--zf-text) !important;
+}
+
 /* ── Inline-style white background overrides ─────────────────────────
    CF occasionally injects style="background-color:#fff" directly on
    elements. Catch the common string variants without touching images. */
