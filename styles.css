@@ -705,14 +705,14 @@ body[class*="zf-theme-"] *:not(img):not(svg)[style*="background:#fff"] {
 /* ── Part 1: Codeforces logo blend ───────────────────────────────────
    Logo fades to invisible in dark themes, reveals on hover.
    mix-blend-mode + contrast/brightness softens it against dark bg. */
-body[class*="zf-"] #header div > a > img[alt="Codeforces"] {
+body[class*="zf-"] #header img[alt="Codeforces"] {
   mix-blend-mode: multiply;
   filter: contrast(1.1) brightness(1.1);
   opacity: 0;
   transition: opacity 0.1s ease-in-out;
   cursor: pointer;
 }
-body[class*="zf-"] #header div > a:hover > img[alt="Codeforces"] {
+body[class*="zf-"] #header a:hover img[alt="Codeforces"] {
   opacity: 1;
 }
 

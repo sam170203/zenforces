@@ -87,6 +87,7 @@
     if (location.href === lastUrl) return;
     lastUrl = location.href;
     ZF.log('Nav: ' + lastUrl);
+    if (settings.enabled) applyTheme(settings.theme);
     for (const [key, mod] of Object.entries(REGISTRY)) {
       if (settings[key] && mod._active && mod.onPageChange) mod.onPageChange(lastUrl);
     }
