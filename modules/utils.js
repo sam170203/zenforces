@@ -33,10 +33,3 @@ ZF.removeStyle = (id) => {
 
 ZF.isValidHex = (val) => /^#[0-9a-fA-F]{6}$/.test(val);
 
-ZF.isValidTimerMode = (val) => ['stopwatch', 'countdown'].includes(val);
-
-ZF.mergeSettings = (stored, defaults) => ({ ...defaults, ...stored });
-
-ZF.setCSSVar = (name, value) => {
-  document.documentElement.style.setProperty(name, value);
-};
