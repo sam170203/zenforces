@@ -697,3 +697,65 @@ body[class*="zf-theme-"] *:not(img):not(svg)[style*="background: #fff"],
 body[class*="zf-theme-"] *:not(img):not(svg)[style*="background:#fff"] {
   background-color: var(--zf-bg-panel) !important;
 }
+
+/* ══════════════════════════════════════════════════════════════════════
+   DEVTOOLS-TESTED FIXES
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* ── Part 1: Codeforces logo blend ───────────────────────────────────
+   Logo fades to invisible in dark themes, reveals on hover.
+   mix-blend-mode + contrast/brightness softens it against dark bg. */
+body[class*="zf-"] #header div > a > img[alt="Codeforces"] {
+  mix-blend-mode: multiply;
+  filter: contrast(1.1) brightness(1.1);
+  opacity: 0;
+  transition: opacity 0.1s ease-in-out;
+  cursor: pointer;
+}
+body[class*="zf-"] #header div > a:hover > img[alt="Codeforces"] {
+  opacity: 1;
+}
+
+/* ── Part 2: Practice badge / contest-state cells ───────────────────── */
+body[class*="zf-"] td.left.dark {
+  background-color: rgba(233, 213, 255, 0.08) !important;
+  color: rgb(233, 213, 255) !important;
+  border: 1px solid rgba(233, 213, 255, 0.15) !important;
+  border-radius: 6px !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  box-sizing: border-box;
+  padding: 8px 0 !important;
+  margin: 0 !important;
+}
+body[class*="zf-"] td.left.dark span.contest-state-regular {
+  color: inherit !important;
+  background: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* ── Part 3: Submission table polish ────────────────────────────────── */
+body[class*="zf-"] td.dark,
+body[class*="zf-"] td.left.dark {
+  background-color: rgba(233, 213, 255, 0.05) !important;
+  color: rgba(233, 213, 255, 0.9) !important;
+  border-bottom: 1px solid rgba(233, 213, 255, 0.1) !important;
+  padding: 8px 12px !important;
+}
+body[class*="zf-"] td.dark a,
+body[class*="zf-"] td.left.dark a {
+  color: #a78bfa !important;
+  text-decoration: none !important;
+  font-weight: 500;
+}
+body[class*="zf-"] td.dark a:hover {
+  text-decoration: underline !important;
+}
+body[class*="zf-"] span.verdict-accepted {
+  color: #4ade80 !important;
+  font-weight: bold !important;
+  text-shadow: 0 0 8px rgba(74, 222, 128, 0.2);
+}
